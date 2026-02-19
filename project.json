@@ -2,10 +2,10 @@
   "project": {
     "name": "Custom MSH (AOCL)",
     "slug": "custom-msh",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "description": {
-      "en": "Custom substrate holder system for 1\u00d71 inch substrates (AOCL) \u2014 holder, 10-slot rack, and 3-rack storage box\n\nOfficial Visualizer and Configurator: Yantra4D",
-      "es": "Sistema portamuestras para sustratos de 1\u00d71 pulgada (AOCL) \u2014 soporte individual, rack de 10 ranuras y caja para 3 racks\n\nVisualizador y configurador oficial: Yantra4D"
+      "en": "Custom substrate holder system for 1\u00d71 inch substrates (AOCL) \u2014 holder, 10-slot rack, 3-rack storage box, and assembly views.\n\nOfficial Visualizer and Configurator: Yantra4D",
+      "es": "Sistema portamuestras para sustratos de 1\u00d71 pulgada (AOCL) \u2014 soporte individual, rack de 10 ranuras, caja para 3 racks y vistas de ensamblaje.\n\nVisualizador y configurador oficial: Yantra4D"
     },
     "thumbnail": "/projects/custom-msh.webp",
     "tags": [
@@ -74,8 +74,8 @@
       "id": "rack",
       "scad_file": "rack.scad",
       "label": {
-        "en": "10-Slot Rack",
-        "es": "Rack de 10 Ranuras"
+        "en": "Staining Rack",
+        "es": "Rack de Tinci\u00f3n"
       },
       "parts": [
         "rack"
@@ -89,10 +89,27 @@
       "id": "box",
       "scad_file": "box.scad",
       "label": {
-        "en": "3-Rack Box",
-        "es": "Caja para 3 Racks"
+        "en": "Racks Box",
+        "es": "Caja para Racks"
       },
       "parts": [
+        "box_base",
+        "box_lid"
+      ],
+      "estimate": {
+        "base_units": 1,
+        "formula": "constant"
+      }
+    },
+    {
+      "id": "assembly",
+      "scad_file": "assembly.scad",
+      "label": {
+        "en": "Assembly",
+        "es": "Ensamblaje"
+      },
+      "parts": [
+        "rack",
         "box_base",
         "box_lid"
       ],
@@ -142,52 +159,152 @@
   ],
   "presets": [
     {
-      "id": "aocl_default",
+      "id": "default_holder",
+      "visible_in_modes": [
+        "holder"
+      ],
       "label": {
-        "en": "AOCL Default (1\"\u00d71\", 10 slots, 3 racks)",
-        "es": "AOCL Predeterminado (1\"\u00d71\", 10 ranuras, 3 racks)"
+        "en": "Default Holder",
+        "es": "Soporte Predeterminado"
       },
       "values": {
+        "substrate_size": 25.4,
+        "tolerance_xy": 0.4,
+        "tolerance_z": 0.2,
+        "wall_thickness": 2.0,
+        "label_area": 1,
+        "chamfer_pocket": 1
+      }
+    },
+    {
+      "id": "default_rack",
+      "visible_in_modes": [
+        "rack"
+      ],
+      "label": {
+        "en": "Default Staining Rack",
+        "es": "Rack de Tinci\u00f3n Predeterminado"
+      },
+      "values": {
+        "substrate_size": 25.4,
+        "num_slots": 10,
+        "tolerance_xy": 0.4,
+        "tolerance_z": 0.2,
+        "wall_thickness": 2.0,
+        "handle": 1,
+        "open_bottom": 1,
+        "drainage_angle": 5,
+        "numbering_start": 1
+      }
+    },
+    {
+      "id": "default_box",
+      "visible_in_modes": [
+        "box"
+      ],
+      "label": {
+        "en": "Default Racks Box",
+        "es": "Caja para Racks Predeterminada"
+      },
+      "values": {
+        "substrate_size": 25.4,
+        "num_racks": 3,
+        "box_depth_target": 26.0,
+        "snap_lid": 1,
+        "tolerance_xy": 0.4,
+        "tolerance_z": 0.2,
+        "wall_thickness": 2.0,
+        "label_area": 1
+      }
+    },
+    {
+      "id": "assembly_rack_slides",
+      "visible_in_modes": [
+        "assembly"
+      ],
+      "label": {
+        "en": "Staining rack WITH corresponding slides",
+        "es": "Rack de tinci\u00f3n CON sustratos correspondientes"
+      },
+      "values": {
+        "assembly_level": 1,
         "substrate_size": 25.4,
         "num_slots": 10,
         "num_racks": 3,
         "tolerance_xy": 0.4,
         "tolerance_z": 0.2,
         "wall_thickness": 2.0,
-        "label_area": 1,
+        "handle": 1,
+        "open_bottom": 1
+      }
+    },
+    {
+      "id": "assembly_box_nolid",
+      "visible_in_modes": [
+        "assembly"
+      ],
+      "label": {
+        "en": "Racks box WITH corresponding staining rack & slides (no lid)",
+        "es": "Caja de racks CON rack de tinci\u00f3n y sustratos (sin tapa)"
+      },
+      "values": {
+        "assembly_level": 2,
+        "substrate_size": 25.4,
+        "num_slots": 10,
+        "num_racks": 3,
+        "tolerance_xy": 0.4,
+        "tolerance_z": 0.2,
+        "wall_thickness": 2.0,
+        "box_depth_target": 26.0,
         "snap_lid": 1,
         "handle": 1,
         "open_bottom": 1
       }
     },
     {
-      "id": "tight_tolerance",
+      "id": "assembly_box_lid",
+      "visible_in_modes": [
+        "assembly"
+      ],
       "label": {
-        "en": "Tight Tolerance (precision printer)",
-        "es": "Tolerancia Fina (impresora de precisi\u00f3n)"
+        "en": "Racks box WITH corresponding staining rack & slides (with lid)",
+        "es": "Caja de racks CON rack de tinci\u00f3n y sustratos (con tapa)"
       },
       "values": {
+        "assembly_level": 3,
         "substrate_size": 25.4,
-        "tolerance_xy": 0.2,
-        "tolerance_z": 0.1,
-        "wall_thickness": 2.0
-      }
-    },
-    {
-      "id": "loose_tolerance",
-      "label": {
-        "en": "Loose Tolerance (easy extraction)",
-        "es": "Tolerancia Amplia (extracci\u00f3n f\u00e1cil)"
-      },
-      "values": {
-        "substrate_size": 25.4,
-        "tolerance_xy": 0.6,
-        "tolerance_z": 0.3,
-        "wall_thickness": 2.0
+        "num_slots": 10,
+        "num_racks": 3,
+        "tolerance_xy": 0.4,
+        "tolerance_z": 0.2,
+        "wall_thickness": 2.0,
+        "box_depth_target": 26.0,
+        "snap_lid": 1,
+        "handle": 1,
+        "open_bottom": 1
       }
     }
   ],
   "parameters": [
+    {
+      "id": "assembly_level",
+      "type": "slider",
+      "default": 3,
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": {
+        "en": "Assembly Detail Level",
+        "es": "Nivel de Detalle del Ensamblaje"
+      },
+      "tooltip": {
+        "en": "Controls which structural mockups are actively populated in the scene",
+        "es": "Controla cu\u00e1les modelos estructurales se pueblan activamente en la escena"
+      },
+      "visible_in_modes": [],
+      "group": "system",
+      "visibility_level": "hidden"
+    },
     {
       "id": "substrate_size",
       "type": "slider",
@@ -206,7 +323,8 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box"
+        "box",
+        "assembly"
       ],
       "group": "substrate"
     },
@@ -228,7 +346,8 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box"
+        "box",
+        "assembly"
       ],
       "group": "tolerance",
       "visibility_level": "advanced"
@@ -249,7 +368,8 @@
         "es": "Holgura de ranura sobre el grosor del sustrato (ondulaci\u00f3n + desfase de capa)"
       },
       "visible_in_modes": [
-        "rack"
+        "rack",
+        "assembly"
       ],
       "group": "tolerance",
       "visibility_level": "advanced"
@@ -272,7 +392,8 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box"
+        "box",
+        "assembly"
       ],
       "group": "structure"
     },
@@ -328,7 +449,8 @@
         "es": "Cantidad de posiciones de sustrato por rack. Especificaci\u00f3n AOCL: 10"
       },
       "visible_in_modes": [
-        "rack"
+        "rack",
+        "assembly"
       ],
       "group": "rack"
     },
@@ -345,7 +467,8 @@
         "es": "Arco asa integrado para transportar el rack"
       },
       "visible_in_modes": [
-        "rack"
+        "rack",
+        "assembly"
       ],
       "group": "rack"
     },
@@ -362,7 +485,8 @@
         "es": "Base de travesa\u00f1as abiertas (menos material, limpieza m\u00e1s f\u00e1cil) vs. piso s\u00f3lido"
       },
       "visible_in_modes": [
-        "rack"
+        "rack",
+        "assembly"
       ],
       "group": "rack"
     },
@@ -403,7 +527,8 @@
         "es": "Primer n\u00famero de ranura grabado en el rack. Requiere Calidad ($fn) > 0."
       },
       "visible_in_modes": [
-        "rack"
+        "rack",
+        "assembly"
       ],
       "group": "rack",
       "visibility_level": "advanced"
@@ -424,7 +549,8 @@
         "es": "Cu\u00e1ntos racks aloja la caja. Especificaci\u00f3n AOCL: 3"
       },
       "visible_in_modes": [
-        "box"
+        "box",
+        "assembly"
       ],
       "group": "box"
     },
@@ -444,7 +570,8 @@
         "es": "Altura exterior en Z de la caja. Especificaci\u00f3n AOCL: ~26 mm (~2.6 cm). Se ajusta autom\u00e1ticamente al m\u00ednimo del rack."
       },
       "visible_in_modes": [
-        "box"
+        "box",
+        "assembly"
       ],
       "group": "box"
     },
@@ -461,7 +588,8 @@
         "es": "Generar brazos de pestillo voladizo a presi\u00f3n en la tapa (brazo 15 mm seguro para PLA)"
       },
       "visible_in_modes": [
-        "box"
+        "box",
+        "assembly"
       ],
       "group": "box"
     },
@@ -483,7 +611,8 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box"
+        "box",
+        "assembly"
       ],
       "group": "quality",
       "visibility_level": "advanced"

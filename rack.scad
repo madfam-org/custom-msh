@@ -143,8 +143,13 @@ module rack_label() {
 }
 
 // Ensure the label recess is subtracted out of the framework, then append raised slot numbers
-difference() {
-  rack_body();
-  rack_label();
+module rack_complete() {
+  difference() {
+    rack_body();
+    rack_label();
+  }
+  slot_numbers();
 }
-slot_numbers();
+
+// Default Render (Only executes when compiling rack.scad directly)
+rack_complete();
