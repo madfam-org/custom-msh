@@ -25,12 +25,12 @@ open_bottom = 1;
 drainage_angle = 5;
 label_area = 1;
 numbering_start = 1;
-fn = 0;
+fn = 32;
 $fn = fn > 0 ? fn : 32;
 
 // --- Derived Geometry / Math ---
 
-_min_rib_w = 2.0;
+_min_rib_w = 2.75; // Forced to 2.75mm to match AOCL 15cm box-length spec
 // Calculate precise slot aperture and overall pitch per slide
 _slot_w = slot_width(custom_slide_thickness, tolerance_z);
 _pitch = pitch(_slot_w, _min_rib_w);

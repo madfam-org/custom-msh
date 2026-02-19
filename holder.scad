@@ -21,7 +21,7 @@ wall_thickness = 2.0;
 // Feature toggles
 label_area = 1; // Checkbox to cut a recess for labels
 chamfer_pocket = 1; // Checkbox to add insertion chamfers to the slot
-fn = 0; // Geometry curve quality
+fn = 32; // Geometry curve quality (Default to 32 for precision)
 
 $fn = fn > 0 ? fn : 32;
 

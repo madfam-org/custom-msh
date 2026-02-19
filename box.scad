@@ -24,7 +24,7 @@ num_racks = 3;
 box_depth_target = 26.0;
 snap_lid = 1;
 label_area = 1;
-fn = 0;
+fn = 32;
 
 // Part renderer (0 = Base, 1 = Lid)
 render_mode = 0;
@@ -33,7 +33,7 @@ $fn = fn > 0 ? fn : 32;
 
 // --- Imposed Rack Math ---
 // Recalculating the physical rack dimensions so the box fits perfectly around them
-_min_rib_w = 2.0;
+_min_rib_w = 2.75;
 _slot_w = slot_width(custom_slide_thickness, tolerance_z);
 _pitch = pitch(_slot_w, _min_rib_w);
 _num_slots = 10;
