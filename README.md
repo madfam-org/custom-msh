@@ -25,6 +25,20 @@ By standardizing this interface in open code:
 - You can adjust tolerances for different 3D printers or materials, without breaking the core functionality.
 - You empower a "right to repair" and open science ecosystem independent of proprietary, rigid commercial lab hardware.
 
+## Standalone Usage
+
+This hyperobject is designed to be fully functional entirely independent of the Yantra4D ecosystem. The core geometry logic relies solely on the open-source **BOSL2** standard library.
+
+To use this on your own machine via OpenSCAD:
+
+```bash
+# Clone the repository and properly pull the BOSL2 library submodule
+git clone --recursive https://github.com/madfam-org/custom-msh.git
+
+# Open the files directly in OpenSCAD
+# (The code automatically links to the local BOSL2 folder included in the clone)
+```
+
 ---
 
 ## Technical Architecture
