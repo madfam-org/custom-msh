@@ -189,8 +189,8 @@ module box_lid() {
 }
 
 // Render the selected discrete part natively based on configuration
-if (render_mode == 0) box_base();
-if (render_mode == 1) {
+if (render_mode == 0 || render_mode == 2) box_base();
+if (render_mode == 1 || render_mode == 3) {
   // Translate lid high in the sky (Z axis) for debugging or separate rendering
   translate([0, 0, _box_z]) box_lid();
 }

@@ -62,6 +62,15 @@
         "en": "Single Holder",
         "es": "Soporte Individual"
       },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2v20\"/><path d=\"M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6\"/></svg>",
+      "initial_bbox": {
+        "center_mm": [
+          14.5,
+          14.5,
+          5.0
+        ],
+        "max_dim_mm": 36
+      },
       "parts": [
         "holder_body"
       ],
@@ -77,6 +86,15 @@
         "en": "Staining Rack",
         "es": "Rack de Tinci\u00f3n"
       },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 6h16\"/><path d=\"M4 12h16\"/><path d=\"M4 18h16\"/><path d=\"M8 4v16\"/><path d=\"M16 4v16\"/></svg>",
+      "initial_bbox": {
+        "center_mm": [
+          24.5,
+          15.0,
+          22.0
+        ],
+        "max_dim_mm": 50
+      },
       "parts": [
         "rack"
       ],
@@ -91,6 +109,15 @@
       "label": {
         "en": "Racks Box",
         "es": "Caja para Racks"
+      },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
+      "initial_bbox": {
+        "center_mm": [
+          76.0,
+          17.5,
+          24.0
+        ],
+        "max_dim_mm": 155
       },
       "parts": [
         "box_base",
@@ -108,10 +135,20 @@
         "en": "Assembly",
         "es": "Ensamblaje"
       },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m21 16-9 5-9-5\"/><path d=\"m21 8-9 5-9-5\"/><path d=\"m12 18-9-5 9-5 9 5z\"/></svg>",
+      "initial_bbox": {
+        "center_mm": [
+          77.5,
+          21.0,
+          33.0
+        ],
+        "max_dim_mm": 160
+      },
       "parts": [
         "rack",
         "box_base",
-        "box_lid"
+        "box_lid",
+        "slides"
       ],
       "estimate": {
         "base_units": 1,
@@ -131,7 +168,7 @@
     },
     {
       "id": "rack",
-      "render_mode": 0,
+      "render_mode": 1,
       "label": {
         "en": "Rack",
         "es": "Rack"
@@ -140,7 +177,7 @@
     },
     {
       "id": "box_base",
-      "render_mode": 0,
+      "render_mode": 2,
       "label": {
         "en": "Box Base",
         "es": "Base de Caja"
@@ -149,12 +186,22 @@
     },
     {
       "id": "box_lid",
-      "render_mode": 1,
+      "render_mode": 3,
       "label": {
         "en": "Box Lid",
         "es": "Tapa de Caja"
       },
       "default_color": "#6b7280"
+    },
+    {
+      "id": "slides",
+      "render_mode": 4,
+      "label": {
+        "en": "Slides",
+        "es": "Sustratos"
+      },
+      "default_color": "#cce8f4",
+      "glass": true
     }
   ],
   "presets": [
@@ -167,6 +214,7 @@
         "en": "Default Holder",
         "es": "Soporte Predeterminado"
       },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2v20\"/><path d=\"M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6\"/></svg>",
       "values": {
         "substrate_size": 25.4,
         "holder_thickness": 2.0,
@@ -186,6 +234,7 @@
         "en": "Default Staining Rack",
         "es": "Rack de Tinci\u00f3n Predeterminado"
       },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 6h16\"/><path d=\"M4 12h16\"/><path d=\"M4 18h16\"/><path d=\"M8 4v16\"/><path d=\"M16 4v16\"/></svg>",
       "values": {
         "substrate_size": 25.4,
         "num_slots": 10,
@@ -207,6 +256,7 @@
         "en": "Default Racks Box",
         "es": "Caja para Racks Predeterminada"
       },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
       "values": {
         "substrate_size": 25.4,
         "num_racks": 3,
@@ -227,6 +277,7 @@
         "en": "Staining rack WITH corresponding slides",
         "es": "Rack de tinci\u00f3n CON sustratos correspondientes"
       },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m21 16-9 5-9-5\"/><path d=\"m21 8-9 5-9-5\"/><path d=\"m12 18-9-5 9-5 9 5z\"/></svg>",
       "values": {
         "assembly_level": 1,
         "substrate_size": 25.4,
@@ -248,6 +299,7 @@
         "en": "Racks box WITH corresponding staining rack & slides (no lid)",
         "es": "Caja de racks CON rack de tinci\u00f3n y sustratos (sin tapa)"
       },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
       "values": {
         "assembly_level": 2,
         "substrate_size": 25.4,
@@ -271,6 +323,7 @@
         "en": "Racks box WITH corresponding staining rack & slides (with lid)",
         "es": "Caja de racks CON rack de tinci\u00f3n y sustratos (con tapa)"
       },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
       "values": {
         "assembly_level": 3,
         "substrate_size": 25.4,

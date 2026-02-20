@@ -25,6 +25,10 @@ include <BOSL2/std.scad>
 // Mode 3: Everything in Mode 2, but we also place the Lid on top to close the box.
 assembly_level = 1;
 
+// Part renderer (-1 = Draw Everything, 1 = Draw Racks, 2 = Draw Base, 3 = Draw Lid)
+// The Yantra4D frontend API injects this parameter to map materials and colors individually
+render_mode = -1;
+
 // --- Physical Dimensions ---
 // Note: We redefine the core measurements here so that our assembly math perfectly 
 // aligns with the separate source files without having to pass variables around globally.
@@ -81,20 +85,35 @@ module slide() {
     cube([custom_slide_thickness, custom_slide_length, custom_slide_width]);
 }
 
+// Module: Creates one field of glass slides for a single rack (positional only, no rack body)
+module slides_for_rack() {
+  for (i = [0:num_slots - 1]) {
+    translate([wall_thickness + i * _pitch + _min_rib_w + (_slot_w - custom_slide_thickness) / 2, wall_thickness + tolerance_xy / 2, _base_h])
+      slide();
+  }
+}
+
 // Module: Renders one Rack and fills its slots with glass slides
 module racks_with_slides() {
   // 1. Draw the physical rack model (imported from rack.scad)
   rack_complete();
 
-  // 2. Run a loop to generate a glass slide for each slot
-  for (i = [0:num_slots - 1]) {
-    // We use Math to precisely calculate the slide's position.
-    // X position: Wall thickness + skip the slots before it + width of a plastic rib + center it inside the slot
-    // Y position: Wall thickness + half the X/Y tolerance (to center it nicely)
-    // Z position: Place it straight on top of the crossbars (floor)
-    translate([wall_thickness + i * _pitch + _min_rib_w + (_slot_w - custom_slide_thickness) / 2, wall_thickness + tolerance_xy / 2, _base_h])
-      slide();
-    // Draw the slide geometry here!
+  // 2. Overlay the glass slides
+  slides_for_rack();
+}
+
+// Module: Renders ONLY the glass slides at their correct assembly positions
+module slides_only() {
+  if (assembly_level == 1) {
+    // Single rack with slides
+    slides_for_rack();
+  } else {
+    // Multiple racks inside the box — position matches box_assembly() placement
+    for (r = [0:num_racks - 1]) {
+      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
+      translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
+        slides_for_rack();
+    }
   }
 }
 
@@ -117,30 +136,61 @@ module box_assembly() {
 }
 
 // --- Main Execution Logic ---
-// We check the "assembly_level" variable configured at the top and 
-// decide what to draw on the screen.
+// We check the "render_mode" variable configured by the frontend API
+// to decide if we should isolate a specific part to export.
 
-if (assembly_level == 1) {
-  // Mode 1: Render just the single rack with slides.
-  racks_with_slides();
-} else if (assembly_level == 2) {
-  // Mode 2: Render the open box, filled with racks and slides.
-  box_assembly();
-} else if (assembly_level == 3) {
-  // Mode 3: Render the whole system capped securely with the lid.
-  box_assembly();
-
-  // Now we must perfectly place the lid on top of the box.
-  // By default, box_lid() renders rightside-up on the ground.
-  // We move it over (X/Y) to account for wall offsets, and lift it up (Z) to the top of the box.
+if (render_mode == 1) {
+  // 1 = Rack(s)
+  if (assembly_level == 1) {
+    racks_with_slides();
+  } else {
+    for (r = [0:num_racks - 1]) {
+      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
+      translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
+        racks_with_slides();
+    }
+  }
+} else if (render_mode == 2) {
+  // 2 = Box Base
+  box_base();
+} else if (render_mode == 3) {
+  // 3 = Box Lid
   translate(
     [
-      -(_lid_wall + _lid_clearance), // Align left edge
-      -(_lid_wall + _lid_clearance) + _o_y, // Align front edge (handling rotation shift)
-      _box_z + 1.5, // Lift it to the absolute top of the box base
+      -(_lid_wall + _lid_clearance),
+      -(_lid_wall + _lid_clearance) + _o_y,
+      _box_z + 1.5,
     ]
   )
-    // The lid is printed upside down, so we do a 180-degree flip over the X axis to cap the box.
     rotate([180, 0, 0])
       box_lid();
+} else if (render_mode == 4) {
+  // 4 = Slides only — AOCL glass substrates positioned in their assembly slots
+  slides_only();
+} else {
+  // If no explicit render_mode is given (-1), we render the full visual assembly preview
+  if (assembly_level == 1) {
+    // Mode 1: Render just the single rack with slides.
+    racks_with_slides();
+  } else if (assembly_level == 2) {
+    // Mode 2: Render the open box, filled with racks and slides.
+    box_assembly();
+  } else if (assembly_level == 3) {
+    // Mode 3: Render the whole system capped securely with the lid.
+    box_assembly();
+
+    // Now we must perfectly place the lid on top of the box.
+    // By default, box_lid() renders rightside-up on the ground.
+    // We move it over (X/Y) to account for wall offsets, and lift it up (Z) to the top of the box.
+    translate(
+      [
+        -(_lid_wall + _lid_clearance), // Align left edge
+        -(_lid_wall + _lid_clearance) + _o_y, // Align front edge (handling rotation shift)
+        _box_z + 1.5, // Lift it to the absolute top of the box base
+      ]
+    )
+      // The lid is printed upside down, so we do a 180-degree flip over the X axis to cap the box.
+      rotate([180, 0, 0])
+        box_lid();
+  }
 }
