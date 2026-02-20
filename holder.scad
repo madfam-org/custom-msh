@@ -3,67 +3,87 @@
 // ============================================================================
 // Copyright (c) 2026 madfam-org
 // Licensed under the CERN Open Hardware Licence Version 2 - Weakly Reciprocal (CERN-OHL-W-2.0).
+//
+// Welcome to the Custom-MSH Single Holder!
+// This file generates a thick, robust block designed to securely hold a single 
+// 1x1 inch glass slide. It is primarily used for individual substrate investigation 
+// under a microscope.
 
+// Import our custom helper library to generate the label recess
 use <aocl_lib.scad>
+
+// Import the BOSL2 library for advanced geometric operations like creating cuboids and chamfers
 include <BOSL2/std.scad>
 
 // --- Configuration Parameters ---
-// Substrate physical dimensions
+// These variables act as the control panel for the 3D model.
+// Changing them alters how the model looks and prints.
+
+// Substrate physical dimensions (AOCL standard is 25.4mm, or 1 inch)
 substrate_size = 25.4;
 
-// FDM printing clearances
-tolerance_xy = 0.4;
-tolerance_z = 0.2;
+// FDM 3D printing clearances. Plastic shrinks and layers bulge, so we add 
+// a small "wiggle room" gap to the holes so parts fit together smoothly.
+tolerance_xy = 0.4; // Clearance on the sides (X and Y axes)
+tolerance_z = 0.2; // Clearance top to bottom (Z axis)
 
-// Structural thickness for robust parts
+// Structural thickness for robust parts. How thick the walls of the holder are.
 wall_thickness = 2.0;
 
-// Feature toggles
-label_area = 1; // Checkbox to cut a recess for labels
-chamfer_pocket = 1; // Checkbox to add insertion chamfers to the slot
-fn = 32; // Geometry curve quality (Default to 32 for precision)
+// Feature toggles (1 = True/On, 0 = False/Off)
+label_area = 1; // Controls whether to cut a shallow dent to stick a label onto
+chamfer_pocket = 1; // Controls whether the top edge of the hole should be sloped to guide the slide in easily
+fn = 32; // Geometry curve quality ($fn). Higher = smoother curves but slower rendering. Defaults to 32.
 
-$fn = fn > 0 ? fn : 32;
+$fn = fn > 0 ? fn : 32; // Set global quality. If it's 0 (auto), force to 32.
 
 // --- Derived Geometry Variables ---
+// These variables do the math behind the scenes to size the bulk of the object.
+// The base holder block is fixed to exactly 5 x 3 inches long and 15mm thick.
 _length = 5 * 25.4;
 _width = 3 * 25.4;
 _thickness = 15.0;
 
-// Add clearance to the pocket
+// Add clearance to the pocket so the 25.4mm slide physically fits into it
 _pocket_size = substrate_size + tolerance_xy;
-_chamfer_size = 1.5;
+_chamfer_size = 1.5; // Depth and width of the sloped top rim
 
-// Area for adhesive or marker labels
-_label_w = 40;
-_label_h = 15;
-_label_d = 0.4;
+// Dimensions for the recess where the user can put a sticker or write on it
+_label_w = 40; // 40mm wide
+_label_h = 15; // 15mm tall
+_label_d = 0.4; // 0.4mm deep
 
 // --- Main Module ---
-// Generates the solid body and uses BOSL2 boolean diff() to carve out the pocket
+// Generates the solid body and uses BOSL2 "diff" to cave out the shapes we want empty.
+
 module holder_body() {
+  // We center the whole object mathematically based on its size
   translate([_length / 2, _width / 2, _thickness / 2]) {
 
-    // Evaluate geometry matching "pocket" and "label" tags and subtract them from the untagged base
+    // Evaluate geometry matching "pocket" and "label" tags and SUBTRACT them from the main base block.
+    // Think of this like taking a cookie cutter to playdough.
     diff("pocket label") {
 
-      // Base cuboid block
+      // 1. Create the main solid playdough block (Base cuboid)
       cuboid([_length, _width, _thickness], rounding=1.5, edges=[TOP, BOTTOM], anchor=CENTER);
 
-      // Pocket geometry built to be subtracted
+      // 2. Define the exact shape and position of the 1x1 inch pocket to be carved out
       tag("pocket") {
+        // We make the pocket cutout slightly taller than the thickness so it punches clean through
         cuboid([_pocket_size, _pocket_size, _thickness + 2], anchor=CENTER);
 
-        // Subtract a chamfered rim area for easier slide insertion
+        // Subtract a chamfered (sloped) rim around the top edge of the pocket for easier slide insertion
         if (chamfer_pocket == 1) {
+          // Move to the top of the block before applying the chamfer shape
           up(_thickness / 2)
             chamfer_mask_z(l=_pocket_size * 2, r=_chamfer_size, square=true, anchor=CENTER);
         }
       }
 
-      // Debossed label area geometry to be subtracted
+      // 3. Define the exact shape of the debossed label area to be carved out
       if (label_area == 1) {
         tag("label")
+          // Move to the top face of the block, sunken by the depth of the label
           down(_thickness / 2 - _label_d)
             aocl_label_recess(_label_w, _label_h, _label_d + 0.1);
       }
@@ -72,4 +92,5 @@ module holder_body() {
 }
 
 // Top-level instantiation
+// This tells OpenSCAD to actually build and show the `holder_body` on the screen!
 holder_body();

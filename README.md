@@ -45,9 +45,9 @@ git clone --recursive https://github.com/madfam-org/custom-msh.git
 
 This repository contains the OpenSCAD generators for a custom substrate holder system tailored for the 1×1 inch AOCL standard. It includes a single holder, a 10-slot rack, and a 3-rack storage box.
 
-### The Yantra4D Manifest (`project.json`)
+### The Yantra4D Manifest ([`project.json`](./project.json))
 
-To make these Hyperobjects usable for non-programmers, this project includes a `project.json` file. This is the **Yantra4D Manifest**.
+To make these Hyperobjects usable for non-programmers, this project includes a [`project.json`](./project.json) file. This is the **Yantra4D Manifest**.
 
 Yantra4D is an open platform that visualizes and configures these parametric models in a web browser. The `project.json` file acts as the bridge:
 1. It reads the OpenSCAD variables (like `tolerance_xy` or `num_slots`).
@@ -69,9 +69,11 @@ When you see the tables below, they are derived from this manifest.
 
 | ID | Label | SCAD File | Parts | Description |
 |---|---|---|---|---|
-| `holder` | Single Holder | `holder.scad` | holder_body | Generates a single AOCL substrate holder. |
-| `rack` | 10-Slot Rack | `rack.scad` | rack | Generates a rack holding multiple substrates. |
-| `box` | 3-Rack Box | `box.scad` | box_base, box_lid | Generates an outer enclosure for racks. |
+| `holder` | Single Holder | [`holder.scad`](./holder.scad) | holder_body | Generates a single AOCL substrate holder. |
+| `rack` | 10-Slot Rack | [`rack.scad`](./rack.scad) | rack | Generates a rack holding multiple substrates. |
+| `box` | 3-Rack Box | [`box.scad`](./box.scad) | box_base, box_lid | Generates an outer enclosure for racks. |
+| `assembly`| Assembly | [`assembly.scad`](./assembly.scad) | rack, box_base, box_lid | Generates an interactive combined assembly view. |
+| `library`| CDG Library | [`aocl_lib.scad`](./aocl_lib.scad) | N/A | Core underlying geometry math & shapes (imported by others). |
 
 ### Parameters & Data Standards
 
