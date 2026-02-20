@@ -169,6 +169,7 @@
       },
       "values": {
         "substrate_size": 25.4,
+        "holder_thickness": 2.0,
         "tolerance_xy": 0.4,
         "tolerance_z": 0.2,
         "wall_thickness": 2.0,
@@ -394,6 +395,26 @@
         "rack",
         "box",
         "assembly"
+      ],
+      "group": "structure"
+    },
+    {
+      "id": "holder_thickness",
+      "type": "slider",
+      "default": 2.0,
+      "min": 1.0,
+      "max": 30.0,
+      "step": 0.5,
+      "label": {
+        "en": "Holder Thickness (mm)",
+        "es": "Grosor del Soporte (mm)"
+      },
+      "tooltip": {
+        "en": "Total Z height of the solid block",
+        "es": "Altura total Z del bloque sólido"
+      },
+      "visible_in_modes": [
+        "holder"
       ],
       "group": "structure"
     },

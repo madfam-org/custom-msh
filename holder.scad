@@ -29,6 +29,7 @@ tolerance_z = 0.2; // Clearance top to bottom (Z axis)
 
 // Structural thickness for robust parts. How thick the walls of the holder are.
 wall_thickness = 2.0;
+holder_thickness = 2.0; // Total Z-axis thickness of the solid holder block
 
 // Feature toggles (1 = True/On, 0 = False/Off)
 label_area = 1; // Controls whether to cut a shallow dent to stick a label onto
@@ -39,10 +40,10 @@ $fn = fn > 0 ? fn : 32; // Set global quality. If it's 0 (auto), force to 32.
 
 // --- Derived Geometry Variables ---
 // These variables do the math behind the scenes to size the bulk of the object.
-// The base holder block is fixed to exactly 5 x 3 inches long and 15mm thick.
+// The base holder block is fixed to exactly 5 x 3 inches long and uses the parametric thickness.
 _length = 5 * 25.4;
 _width = 3 * 25.4;
-_thickness = 15.0;
+_thickness = holder_thickness;
 
 // Add clearance to the pocket so the 25.4mm slide physically fits into it
 _pocket_size = substrate_size + tolerance_xy;
@@ -65,7 +66,7 @@ module holder_body() {
     diff("pocket label") {
 
       // 1. Create the main solid playdough block (Base cuboid)
-      cuboid([_length, _width, _thickness], rounding=1.5, edges=[TOP, BOTTOM], anchor=CENTER);
+      cuboid([_length, _width, _thickness], rounding=min(1.5, _thickness / 2.01), edges=[TOP, BOTTOM], anchor=CENTER);
 
       // 2. Define the exact shape and position of the 1x1 inch pocket to be carved out
       tag("pocket") {
@@ -75,8 +76,8 @@ module holder_body() {
         // Subtract a chamfered (sloped) rim around the top edge of the pocket for easier slide insertion
         if (chamfer_pocket == 1) {
           // Move to the top of the block before applying the chamfer shape
-          up(_thickness / 2)
-            chamfer_mask_z(l=_pocket_size * 2, r=_chamfer_size, square=true, anchor=CENTER);
+          up(_thickness / 2) down(_chamfer_size)
+              prismoid(size1=[_pocket_size, _pocket_size], size2=[_pocket_size + 2 * _chamfer_size, _pocket_size + 2 * _chamfer_size], h=_chamfer_size + 0.01, anchor=BOTTOM);
         }
       }
 
