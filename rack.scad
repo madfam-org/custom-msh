@@ -44,8 +44,8 @@ $fn = fn > 0 ? fn : 32;
 _min_rib_w = 2.75; // The minimum thickness of the plastic dividers holding slides (forced to match AOCL spec)
 
 // Calculate precise slot width and overall pitch (distance from slot to slot)
-_slot_w = slot_width(custom_slide_thickness, tolerance_z); // Calls the math function from aocl_lib.scad
-_pitch = pitch(_slot_w, _min_rib_w);
+_slot_w = slide_slot_width(custom_slide_thickness, tolerance_z); // Gap width
+_pitch = slide_pitch(_slot_w, _min_rib_w); // Distance required per slot_w, _min_rib_w);
 
 // Determine the height of the ribs based on how deep the slide sits in it
 _slot_depth = custom_slide_width + tolerance_xy;
@@ -111,7 +111,7 @@ module rack_body() {
     for (i = [0:num_slots]) {
       // Loop over every slot and move the X coordinate by the "pitch" to space it out
       translate([i * _pitch, 0, 0])
-        aocl_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+        slide_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
     }
   }
 
@@ -119,7 +119,7 @@ module rack_body() {
   translate([_pillar_w, _body_y - _pillar_w, _base_h]) {
     for (i = [0:num_slots]) {
       translate([i * _pitch, 0, 0])
-        aocl_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+        slide_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
     }
   }
 
