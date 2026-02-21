@@ -35,6 +35,8 @@ label_area = 1; // Indents a space for writing labels
 fn = 32; // Smoothness curve quality. (Default to 32)
 $fn = fn > 0 ? fn : 32;
 
+$fn = fn > 0 ? fn : 32;
+
 // Part renderer (0 = Draw Base, 1 = Draw Lid)
 render_mode = 0;
 
@@ -189,8 +191,9 @@ module box_lid() {
 }
 
 // Render the selected discrete part natively based on configuration
-if (render_mode == 0 || render_mode == 2) box_base();
+if (render_mode == 0 || render_mode == 2) {
+  box_base();
+}
 if (render_mode == 1 || render_mode == 3) {
-  // Translate lid high in the sky (Z axis) for debugging or separate rendering
-  translate([0, 0, _box_z]) box_lid();
+  box_lid();
 }

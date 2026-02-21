@@ -120,7 +120,54 @@
         "max_dim_mm": 155
       },
       "parts": [
-        "box_base",
+        "box_base"
+      ],
+      "estimate": {
+        "base_units": 1,
+        "formula": "constant"
+      }
+    },
+    {
+      "id": "base",
+      "scad_file": "box.scad",
+      "label": {
+        "en": "Box Base",
+        "es": "Base de Caja"
+      },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
+      "initial_bbox": {
+        "center_mm": [
+          76.0,
+          17.5,
+          24.0
+        ],
+        "max_dim_mm": 155
+      },
+      "parts": [
+        "box_base"
+      ],
+      "estimate": {
+        "base_units": 1,
+        "formula": "constant"
+      }
+    },
+    {
+      "id": "lid",
+      "scad_file": "box.scad",
+      "label": {
+        "en": "Box Lid",
+        "es": "Tapa de Caja"
+      },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
+      "initial_bbox": {
+        "center_mm": [
+          76.0,
+          17.5,
+          12.0
+        ],
+        "max_dim_mm": 155
+      },
+      "parts": [
         "box_lid"
       ],
       "estimate": {
@@ -250,7 +297,9 @@
     {
       "id": "default_box",
       "visible_in_modes": [
-        "box"
+        "box",
+        "base",
+        "lid"
       ],
       "label": {
         "en": "Default Racks Box",
@@ -378,7 +427,9 @@
         "holder",
         "rack",
         "box",
-        "assembly"
+        "assembly",
+        "base",
+        "lid"
       ],
       "group": "substrate"
     },
@@ -401,7 +452,9 @@
         "holder",
         "rack",
         "box",
-        "assembly"
+        "assembly",
+        "base",
+        "lid"
       ],
       "group": "tolerance",
       "visibility_level": "advanced"
@@ -447,7 +500,9 @@
         "holder",
         "rack",
         "box",
-        "assembly"
+        "assembly",
+        "base",
+        "lid"
       ],
       "group": "structure"
     },
@@ -464,7 +519,7 @@
       },
       "tooltip": {
         "en": "Total Z height of the solid block",
-        "es": "Altura total Z del bloque sólido"
+        "es": "Altura total Z del bloque s\u00f3lido"
       },
       "visible_in_modes": [
         "holder"
@@ -486,7 +541,9 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box"
+        "box",
+        "base",
+        "lid"
       ],
       "group": "features"
     },
@@ -624,7 +681,9 @@
       },
       "visible_in_modes": [
         "box",
-        "assembly"
+        "assembly",
+        "base",
+        "lid"
       ],
       "group": "box"
     },
@@ -645,7 +704,9 @@
       },
       "visible_in_modes": [
         "box",
-        "assembly"
+        "assembly",
+        "base",
+        "lid"
       ],
       "group": "box"
     },
@@ -663,7 +724,9 @@
       },
       "visible_in_modes": [
         "box",
-        "assembly"
+        "assembly",
+        "base",
+        "lid"
       ],
       "group": "box"
     },
@@ -686,7 +749,9 @@
         "holder",
         "rack",
         "box",
-        "assembly"
+        "assembly",
+        "base",
+        "lid"
       ],
       "group": "quality",
       "visibility_level": "advanced"
