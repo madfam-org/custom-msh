@@ -13,7 +13,7 @@
 use <aocl_lib.scad>
 
 // Import the Standard BOSL2 Library for advanced geometric shapes like 'cuboid'
-include <BOSL2/std.scad>
+include <../../libs/BOSL2/std.scad>
 
 // --- Configuration Parameters ---
 

@@ -15,7 +15,7 @@ use <rack.scad>
 use <box.scad>
 
 // "include" brings in an external library entirely (BOSL2 here provides advanced shapes if needed).
-include <BOSL2/std.scad>
+include <../../libs/BOSL2/std.scad>
 
 // --- Configuration Parameters ---
 

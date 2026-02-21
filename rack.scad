@@ -13,7 +13,7 @@
 use <aocl_lib.scad>
 
 // Import the Standard BOSL2 Library for math and geometry
-include <BOSL2/std.scad>
+include <../../libs/BOSL2/std.scad>
 
 // --- Configuration Parameters ---
 // These variables act as the control panel for the 3D model.

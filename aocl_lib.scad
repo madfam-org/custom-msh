@@ -16,7 +16,7 @@
  */
 
 // Import the BOSL2 standard library for advanced 3D geometry manipulation
-include <BOSL2/std.scad>
+include <../../libs/BOSL2/std.scad>
 include <../microscope-slide-hyperobject/slide.scad>
 
 // --- CDG Math Functions ---
