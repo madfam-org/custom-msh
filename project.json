@@ -14,7 +14,8 @@
       "aocl",
       "substrate",
       "microscope",
-      "hyperobject"
+      "hyperobject",
+      "commons"
     ],
     "difficulty": "intermediate"
   },
@@ -761,5 +762,6 @@
     "base_time": 5,
     "per_unit": 1,
     "per_part": 8
-  }
+  },
+  "export_formats": ["stl", "3mf"]
 }
