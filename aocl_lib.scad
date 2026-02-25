@@ -19,6 +19,11 @@
 include <../../libs/BOSL2/std.scad>
 
 // --- CDG Math Functions ---
+function slide_slot_width(thickness, tolerance) = thickness + 2 * tolerance;
+function slide_pitch(slot_w, rib_w) = slot_w + rib_w;
+function slot_width(thickness, tolerance) = slide_slot_width(thickness, tolerance);
+function pitch(slot_w, rib_w) = slide_pitch(slot_w, rib_w);
+
 // --- Core Modules ---
 // These modules generate physical 3D shapes.
 
@@ -42,4 +47,15 @@ module aocl_snap_arm(len, w, t, hook_h, hook_d) {
 // This is simply a small block sticking out of the box base that the snap-arm hook grabs onto.
 module aocl_snap_catch(w, h, d) {
   cuboid([w, d, h], anchor=BOTTOM);
+}
+
+module slide_retention_rib(height, depth, root_w, tip_w, chamfer_h = 0) {
+  _main_h = height - chamfer_h;
+  if (_main_h > 0) {
+    prismoid(size1=[root_w, depth], size2=[tip_w, depth], h=_main_h, anchor=BOTTOM);
+  }
+  if (chamfer_h > 0) {
+    translate([0, 0, _main_h])
+      prismoid(size1=[tip_w, depth], size2=[tip_w * 0.3, depth * 0.3], h=chamfer_h, anchor=BOTTOM);
+  }
 }
