@@ -17,7 +17,8 @@
       "hyperobject",
       "commons"
     ],
-    "difficulty": "intermediate"
+    "difficulty": "intermediate",
+    "force_backend": true
   },
   "hyperobject": {
     "domain": "medical",
@@ -763,5 +764,8 @@
     "per_unit": 1,
     "per_part": 8
   },
-  "export_formats": ["stl", "3mf"]
+  "export_formats": [
+    "stl",
+    "3mf"
+  ]
 }
