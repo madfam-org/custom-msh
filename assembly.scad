@@ -33,6 +33,8 @@ render_mode = -1;
 show_base = (assembly_level >= 2);
 show_lid = (assembly_level >= 3);
 
+stack_along_y = 0; // If 1, expand box along the Y-axis instead of the X-axis
+
 // --- Physical Dimensions ---
 // Note: We redefine the core measurements here so that our assembly math perfectly 
 // aligns with the separate source files without having to pass variables around globally.
@@ -67,8 +69,14 @@ _rack_z = _slot_depth + _crossbar_h;
 
 // 2. Box Cavity Math
 // Calculate the hollow interior size of the box based on how many racks we need it to hold
-_inner_x = num_racks * (_rack_x + _rack_clearance) + _rack_clearance;
-_inner_y = _rack_y + _rack_clearance * 2;
+_inner_x =
+  (stack_along_y) ? (_rack_x + _rack_clearance * 2)
+  : (num_racks * (_rack_x + _rack_clearance) + _rack_clearance);
+
+_inner_y =
+  (stack_along_y) ? (num_racks * (_rack_y + _rack_clearance) + _rack_clearance)
+  : (_rack_y + _rack_clearance * 2);
+
 _inner_z = max(26.0 - 2 * wall_thickness, _rack_z + _rack_clearance);
 
 // 3. Lid Positioning Math
@@ -114,9 +122,15 @@ module slides_only() {
   } else {
     // Multiple racks inside the box — position matches box_assembly() placement
     for (r = [0:num_racks - 1]) {
-      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
-      translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
-        slides_for_rack();
+      if (stack_along_y) {
+        _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
+        translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
+          slides_for_rack();
+      } else {
+        _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
+        translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
+          slides_for_rack();
+      }
     }
   }
 }
@@ -129,9 +143,15 @@ module racks_only() {
   } else {
     // Multiple racks inside the box — position matches box_assembly() placement
     for (r = [0:num_racks - 1]) {
-      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
-      translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
-        rack_complete();
+      if (stack_along_y) {
+        _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
+        translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
+          rack_complete();
+      } else {
+        _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
+        translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
+          rack_complete();
+      }
     }
   }
 }
@@ -143,14 +163,19 @@ module box_assembly() {
 
   // 2. Run a loop to place all the required racks inside the box cavity
   for (r = [0:num_racks - 1]) {
-    // Calculate the starting X coordinate for each rack. 
-    // Skips over previously placed racks + the guide rails separating them.
-    _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
+    if (stack_along_y) {
+      _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
+      translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
+        racks_with_slides();
+    } else {
+      // Calculate the starting X coordinate for each rack. 
+      // Skips over previously placed racks + the guide rails separating them.
+      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
 
-    // Translate (move) the completed rack to its designated slot inside the box
-    translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
-      racks_with_slides();
-    // Draw the rack containing the slides!
+      // Translate (move) the completed rack to its designated slot inside the box
+      translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
+        racks_with_slides();
+    }
   }
 }
 

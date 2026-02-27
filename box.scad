@@ -32,6 +32,7 @@ num_racks = 3; // Determines how wide the box should be to fit this many racks
 box_depth_target = 26.0; // The desired vertical height of the base
 snap_lid = 1; // Creates locking latch hooks (1 = True)
 label_area = 1; // Indents a space for writing labels
+stack_along_y = 0; // If 1, expand box along the Y-axis instead of the X-axis
 fn = 32; // Smoothness curve quality. (Default to 32)
 $fn = fn > 0 ? fn : 32;
 
@@ -64,8 +65,13 @@ _total_rack_h = _rack_z + _handle_h; // Full vertical height of a rack
 _rack_clearance = 0.5; // Gap between the racks and the box walls
 
 // Define inner hollow cavity to hold all racks across X, Y, Z dimensions
-_inner_x = num_racks * (_rack_x + _rack_clearance) + _rack_clearance;
-_inner_y = _rack_y + _rack_clearance * 2;
+_inner_x =
+  (stack_along_y) ? (_rack_x + _rack_clearance * 2)
+  : (num_racks * (_rack_x + _rack_clearance) + _rack_clearance);
+
+_inner_y =
+  (stack_along_y) ? (num_racks * (_rack_y + _rack_clearance) + _rack_clearance)
+  : (_rack_y + _rack_clearance * 2);
 // Box base Z-depth is bounded. It must physically hold the rack body at least.
 _inner_z = max(box_depth_target - 2 * wall_thickness, _rack_z + _rack_clearance);
 
@@ -100,16 +106,25 @@ _label_h = min(18, _box_y * 0.35);
 // Builds internal ribs/walls along the floor to prevent identical racks from colliding laterally
 module rack_guide_rails() {
   for (r = [0:num_racks - 1]) {
-    // Determine the X separation gap for this specific rack relative to left wall
-    _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
-
-    // Left guide rail for current rack slot
-    translate([_rx - _guide_w, wall_thickness, wall_thickness])
-      cube([_guide_w, _guide_d, _guide_h]);
-
-    // Right guide rail for current rack slot
-    translate([_rx + _rack_x, wall_thickness, wall_thickness])
-      cube([_guide_w, _guide_d, _guide_h]);
+    if (stack_along_y) {
+      // Stacking along Y-axis: racks are arranged sequentially along Y
+      _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
+      // Front guide rail for current rack slot
+      translate([wall_thickness, _ry - _guide_w, wall_thickness])
+        cube([_inner_x, _guide_w, _guide_h]);
+      // Back guide rail for current rack slot
+      translate([wall_thickness, _ry + _rack_y, wall_thickness])
+        cube([_inner_x, _guide_w, _guide_h]);
+    } else {
+      // Stacking along X-axis: racks are arranged sequentially along X
+      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
+      // Left guide rail for current rack slot
+      translate([_rx - _guide_w, wall_thickness, wall_thickness])
+        cube([_guide_w, _inner_y, _guide_h]);
+      // Right guide rail for current rack slot
+      translate([_rx + _rack_x, wall_thickness, wall_thickness])
+        cube([_guide_w, _inner_y, _guide_h]);
+    }
   }
 }
 
@@ -170,14 +185,14 @@ module box_lid() {
     translate([_lid_wall, _lid_wall, 1.5]) cube([_i_x, _i_y, _lid_z]);
 
     // Indent a small label space directly on the ceiling of the lid
-    if (label_area == 1) {
+    if (label_area) {
       translate([(_o_x - _label_w) / 2, (_o_y - _label_h) / 2, _lid_z - 0.39])
         aocl_label_recess(_label_w, _label_h, 0.4);
     }
   }
 
   // Draw two downward-facing cantilever snap hooks to lock into the base catches
-  if (snap_lid == 1) {
+  if (snap_lid) {
     // Front Hook
     translate([_o_x / 2 - _latch_arm_w / 2, 0, _lid_z])
       mirror([0, 0, 1]) // Point hook descending down explicitly

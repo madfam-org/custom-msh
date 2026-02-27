@@ -316,7 +316,8 @@
         "tolerance_xy": 0.4,
         "tolerance_z": 0.2,
         "wall_thickness": 2.0,
-        "label_area": 1
+        "label_area": 1,
+        "stack_along_y": 0
       }
     },
     {
@@ -338,7 +339,8 @@
         "tolerance_z": 0.2,
         "wall_thickness": 2.0,
         "handle": 1,
-        "open_bottom": 1
+        "open_bottom": 1,
+        "stack_along_y": 0
       }
     },
     {
@@ -362,7 +364,8 @@
         "box_depth_target": 26.0,
         "snap_lid": 1,
         "handle": 1,
-        "open_bottom": 1
+        "open_bottom": 1,
+        "stack_along_y": 0
       }
     },
     {
@@ -386,7 +389,8 @@
         "box_depth_target": 26.0,
         "snap_lid": 1,
         "handle": 1,
-        "open_bottom": 1
+        "open_bottom": 1,
+        "stack_along_y": 0
       }
     }
   ],
@@ -434,6 +438,26 @@
         "lid"
       ],
       "group": "substrate"
+    },
+    {
+      "id": "stack_along_y",
+      "type": "checkbox",
+      "default": 0,
+      "label": {
+        "en": "Stack Racks Along Y-Axis",
+        "es": "Apilar Racks a lo Largo del Eje Y"
+      },
+      "tooltip": {
+        "en": "If disabled, racks are arranged side-by-side along the X-axis (front faces together). If enabled, they are arranged side-by-side along the Y-axis (side faces together).",
+        "es": "Si est\u00e1 deshabilitado, los racks se ordenan lado a lado en el eje X (caras frontales juntas). Si est\u00e1 habilitado, se ordenan en el eje Y (caras laterales juntas)."
+      },
+      "visible_in_modes": [
+        "box",
+        "assembly",
+        "base",
+        "lid"
+      ],
+      "group": "system"
     },
     {
       "id": "tolerance_xy",
