@@ -23,7 +23,7 @@ include <../../libs/BOSL2/std.scad>
 // Mode 1: Just a single Rack, loaded with glass slides.
 // Mode 2: The bottom Box Base, loaded with 3 Racks, each loaded with slides.
 // Mode 3: Everything in Mode 2, but we also place the Lid on top to close the box.
-assembly_level = 1;
+assembly_level = 3;
 
 // Part renderer (-1 = Draw Everything, 1 = Draw Racks, 2 = Draw Base, 3 = Draw Lid)
 // The Yantra4D frontend API injects this parameter to map materials and colors individually
