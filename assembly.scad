@@ -88,6 +88,30 @@ _lid_clearance = 0.3; // Extra space so the lid isn't too tight
 _lid_wall = 1.5; // The thickness of the lid's walls
 _o_y = _box_y + _lid_clearance * 2 + _lid_wall * 2; // Outer dimension for the lid
 
+// --- Box module variables (required by box_base/box_lid via `use`) ---
+snap_lid = 1; // Creates locking latch hooks (1 = True)
+label_area = 1; // Indents a space for writing labels
+fn = 32;
+$fn = fn > 0 ? fn : 32;
+
+// Guide rail dimensions
+_guide_h = _crossbar_h + 2;
+_guide_w = 1.5;
+_guide_d = _inner_y;
+
+// Latch arm specifications
+_latch_arm_len = 15;
+_latch_arm_w = 8;
+_latch_arm_t = 1.2;
+_latch_hook_h = 2;
+_latch_hook_d = 1.5;
+
+// Lid dimensions
+_handle_h = 14;
+_lid_z = max(12, _handle_h + 2);
+_label_w = min(60, _box_x * 0.55);
+_label_h = min(18, _box_y * 0.35);
+
 // --- Visual Modules ---
 
 // Module: Creates a semi-transparent, light-blue "glass slide"

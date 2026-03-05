@@ -36,8 +36,6 @@ stack_along_y = 0; // If 1, expand box along the Y-axis instead of the X-axis
 fn = 32; // Smoothness curve quality. (Default to 32)
 $fn = fn > 0 ? fn : 32;
 
-$fn = fn > 0 ? fn : 32;
-
 // Part renderer (0 = Draw Base, 1 = Draw Lid)
 render_mode = 0;
 
