@@ -88,9 +88,9 @@ module rack_body() {
     if (handle == 1) {
       // 45-degree arched cutout for the fingers
       _holex = _pillar_w + 0.2; // Extra depth to punch through cleanly
-      _rect_h = max(0, (_wall_z - _body_z - _grip_h) - (_holey/2));
-      
-      translate([-0.1, _leg_w, _body_z]) {
+      _rect_h = max(0, (_wall_z - _base_h - _grip_h) - (_holey/2));
+
+      translate([-0.1, _leg_w, _base_h]) {
         // Base rectangle for the fingers
         if (_rect_h > 0) cube([_holex, _holey, _rect_h]);
         
@@ -109,9 +109,9 @@ module rack_body() {
     cube([_pillar_w, _body_y, _wall_z]);
     if (handle == 1) {
       _holex = _pillar_w + 0.2;
-      _rect_h = max(0, (_wall_z - _body_z - _grip_h) - (_holey/2));
-      
-      translate([-0.1, _leg_w, _body_z]) {
+      _rect_h = max(0, (_wall_z - _base_h - _grip_h) - (_holey/2));
+
+      translate([-0.1, _leg_w, _base_h]) {
         if (_rect_h > 0) cube([_holex, _holey, _rect_h]);
         
         translate([0, 0, _rect_h])
