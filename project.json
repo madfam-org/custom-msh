@@ -4,8 +4,8 @@
     "slug": "custom-msh",
     "version": "2.1.0",
     "description": {
-      "en": "Custom substrate holder system for 1\u00d71 inch substrates (AOCL) \u2014 holder, 10-slot rack, 3-rack storage box, and assembly views.\n\nOfficial Visualizer and Configurator: Yantra4D",
-      "es": "Sistema portamuestras para sustratos de 1\u00d71 pulgada (AOCL) \u2014 soporte individual, rack de 10 ranuras, caja para 3 racks y vistas de ensamblaje.\n\nVisualizador y configurador oficial: Yantra4D"
+      "en": "Custom substrate holder system for 1×1 inch substrates (AOCL) — holder, 10-slot rack, 3-rack storage box, and assembly views.\n\nOfficial Visualizer and Configurator: Yantra4D",
+      "es": "Sistema portamuestras para sustratos de 1×1 pulgada (AOCL) — soporte individual, rack de 10 ranuras, caja para 3 racks y vistas de ensamblaje.\n\nVisualizador y configurador oficial: Yantra4D"
     },
     "thumbnail": "/projects/custom-msh.webp",
     "tags": [
@@ -26,8 +26,8 @@
       {
         "id": "aocl_substrate_pocket",
         "label": {
-          "en": "AOCL 1\"\u00d71\" Substrate Pocket",
-          "es": "Bolsillo para Sustrato AOCL 1\"\u00d71\""
+          "en": "AOCL 1\"×1\" Substrate Pocket",
+          "es": "Bolsillo para Sustrato AOCL 1\"×1\""
         },
         "geometry_type": "pocket",
         "standard": "internal/aocl",
@@ -41,7 +41,7 @@
         "id": "snap_latch_interface",
         "label": {
           "en": "Snap-Fit Lid Latch",
-          "es": "Pestillo de Tapa a Presi\u00f3n"
+          "es": "Pestillo de Tapa a Presión"
         },
         "geometry_type": "snap",
         "standard": "internal",
@@ -52,8 +52,8 @@
     ],
     "commons_license": "CERN-OHL-W-2.0",
     "societal_benefit": {
-      "en": "Enables fabrication of a precision substrate retention system for AOCL laboratory workflows \u2014 independent of commercial supply chains.",
-      "es": "Permite fabricar un sistema de retenci\u00f3n de sustratos de precisi\u00f3n para flujos de trabajo de laboratorio AOCL \u2014 independiente de cadenas de suministro comerciales."
+      "en": "Enables fabrication of a precision substrate retention system for AOCL laboratory workflows — independent of commercial supply chains.",
+      "es": "Permite fabricar un sistema de retención de sustratos de precisión para flujos de trabajo de laboratorio AOCL — independiente de cadenas de suministro comerciales."
     }
   },
   "modes": [
@@ -86,7 +86,7 @@
       "scad_file": "rack.scad",
       "label": {
         "en": "Staining Rack",
-        "es": "Rack de Tinci\u00f3n"
+        "es": "Rack de Tinción"
       },
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 6h16\"/><path d=\"M4 12h16\"/><path d=\"M4 18h16\"/><path d=\"M8 4v16\"/><path d=\"M16 4v16\"/></svg>",
       "initial_bbox": {
@@ -281,7 +281,7 @@
       ],
       "label": {
         "en": "Default Staining Rack",
-        "es": "Rack de Tinci\u00f3n Predeterminado"
+        "es": "Rack de Tinción Predeterminado"
       },
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 6h16\"/><path d=\"M4 12h16\"/><path d=\"M4 18h16\"/><path d=\"M8 4v16\"/><path d=\"M16 4v16\"/></svg>",
       "values": {
@@ -328,7 +328,7 @@
       ],
       "label": {
         "en": "Staining rack WITH corresponding slides",
-        "es": "Rack de tinci\u00f3n CON sustratos correspondientes"
+        "es": "Rack de tinción CON sustratos correspondientes"
       },
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m21 16-9 5-9-5\"/><path d=\"m21 8-9 5-9-5\"/><path d=\"m12 18-9-5 9-5 9 5z\"/></svg>",
       "values": {
@@ -352,7 +352,7 @@
       ],
       "label": {
         "en": "Racks box WITH corresponding staining rack & slides (no lid)",
-        "es": "Caja de racks CON rack de tinci\u00f3n y sustratos (sin tapa)"
+        "es": "Caja de racks CON rack de tinción y sustratos (sin tapa)"
       },
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
       "values": {
@@ -377,7 +377,7 @@
       ],
       "label": {
         "en": "Racks box WITH corresponding staining rack & slides (with lid)",
-        "es": "Caja de racks CON rack de tinci\u00f3n y sustratos (con tapa)"
+        "es": "Caja de racks CON rack de tinción y sustratos (con tapa)"
       },
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
       "values": {
@@ -410,7 +410,7 @@
       },
       "tooltip": {
         "en": "Controls which structural mockups are actively populated in the scene",
-        "es": "Controla cu\u00e1les modelos estructurales se pueblan activamente en la escena"
+        "es": "Controla cuáles modelos estructurales se pueblan activamente en la escena"
       },
       "visible_in_modes": [],
       "group": "system",
@@ -425,11 +425,11 @@
       "step": 0.1,
       "label": {
         "en": "Substrate Size (mm)",
-        "es": "Tama\u00f1o Sustrato (mm)"
+        "es": "Tamaño Sustrato (mm)"
       },
       "tooltip": {
         "en": "Square substrate side length. AOCL spec: 25.4 mm (1 inch)",
-        "es": "Lado del sustrato cuadrado. Especificaci\u00f3n AOCL: 25.4 mm (1 pulgada)"
+        "es": "Lado del sustrato cuadrado. Especificación AOCL: 25.4 mm (1 pulgada)"
       },
       "visible_in_modes": [
         "holder",
@@ -451,7 +451,7 @@
       },
       "tooltip": {
         "en": "If disabled, racks are arranged side-by-side along the X-axis (front faces together). If enabled, they are arranged side-by-side along the Y-axis (side faces together).",
-        "es": "Si est\u00e1 deshabilitado, los racks se ordenan lado a lado en el eje X (caras frontales juntas). Si est\u00e1 habilitado, se ordenan en el eje Y (caras laterales juntas)."
+        "es": "Si está deshabilitado, los racks se ordenan lado a lado en el eje X (caras frontales juntas). Si está habilitado, se ordenan en el eje Y (caras laterales juntas)."
       },
       "visible_in_modes": [
         "box",
@@ -474,7 +474,7 @@
       },
       "tooltip": {
         "en": "Horizontal clearance added to pocket/slot openings for FDM shrinkage compensation",
-        "es": "Holgura horizontal a\u00f1adida a bolsillos y ranuras para compensaci\u00f3n de contracci\u00f3n FDM"
+        "es": "Holgura horizontal añadida a bolsillos y ranuras para compensación de contracción FDM"
       },
       "visible_in_modes": [
         "holder",
@@ -500,7 +500,7 @@
       },
       "tooltip": {
         "en": "Slot width clearance over substrate thickness (waviness + layer offset)",
-        "es": "Holgura de ranura sobre el grosor del sustrato (ondulaci\u00f3n + desfase de capa)"
+        "es": "Holgura de ranura sobre el grosor del sustrato (ondulación + desfase de capa)"
       },
       "visible_in_modes": [
         "rack",
@@ -547,7 +547,7 @@
       },
       "tooltip": {
         "en": "Total Z height of the solid block",
-        "es": "Altura total Z del bloque s\u00f3lido"
+        "es": "Altura total Z del bloque sólido"
       },
       "visible_in_modes": [
         "holder"
@@ -581,11 +581,11 @@
       "default": true,
       "label": {
         "en": "Chamfer Pocket Entry",
-        "es": "Chafl\u00e1n de Entrada al Bolsillo"
+        "es": "Chaflán de Entrada al Bolsillo"
       },
       "tooltip": {
-        "en": "45\u00b0 chamfer at pocket entry to guide substrate insertion",
-        "es": "Chafl\u00e1n 45\u00b0 en la entrada del bolsillo para guiar la inserci\u00f3n del sustrato"
+        "en": "45° chamfer at pocket entry to guide substrate insertion",
+        "es": "Chaflán 45° en la entrada del bolsillo para guiar la inserción del sustrato"
       },
       "visible_in_modes": [
         "holder"
@@ -605,7 +605,7 @@
       },
       "tooltip": {
         "en": "Number of substrate positions per rack. AOCL spec: 10",
-        "es": "Cantidad de posiciones de sustrato por rack. Especificaci\u00f3n AOCL: 10"
+        "es": "Cantidad de posiciones de sustrato por rack. Especificación AOCL: 10"
       },
       "visible_in_modes": [
         "rack",
@@ -641,7 +641,7 @@
       },
       "tooltip": {
         "en": "Open crossbar base (less material, easier cleaning) vs. solid floor",
-        "es": "Base de travesa\u00f1as abiertas (menos material, limpieza m\u00e1s f\u00e1cil) vs. piso s\u00f3lido"
+        "es": "Base de travesañas abiertas (menos material, limpieza más fácil) vs. piso sólido"
       },
       "visible_in_modes": [
         "rack",
@@ -657,12 +657,12 @@
       "max": 15,
       "step": 1,
       "label": {
-        "en": "Drainage Angle (\u00b0)",
-        "es": "\u00c1ngulo de Drenaje (\u00b0)"
+        "en": "Drainage Angle (°)",
+        "es": "Ángulo de Drenaje (°)"
       },
       "tooltip": {
         "en": "Slope for fluid runoff (0 = flat). Reserved for future use.",
-        "es": "Pendiente para escurrimiento de l\u00edquidos (0 = plano). Reservado para uso futuro."
+        "es": "Pendiente para escurrimiento de líquidos (0 = plano). Reservado para uso futuro."
       },
       "visible_in_modes": [
         "rack"
@@ -679,11 +679,11 @@
       "step": 1,
       "label": {
         "en": "Numbering Start",
-        "es": "Numeraci\u00f3n Inicial"
+        "es": "Numeración Inicial"
       },
       "tooltip": {
         "en": "First slot number engraved on the rack. Requires Quality ($fn) > 0.",
-        "es": "Primer n\u00famero de ranura grabado en el rack. Requiere Calidad ($fn) > 0."
+        "es": "Primer número de ranura grabado en el rack. Requiere Calidad ($fn) > 0."
       },
       "visible_in_modes": [
         "rack",
@@ -719,11 +719,11 @@
       "step": 1,
       "label": {
         "en": "Number of Racks",
-        "es": "N\u00famero de Racks"
+        "es": "Número de Racks"
       },
       "tooltip": {
         "en": "How many racks the box accommodates. AOCL spec: 3",
-        "es": "Cu\u00e1ntos racks aloja la caja. Especificaci\u00f3n AOCL: 3"
+        "es": "Cuántos racks aloja la caja. Especificación AOCL: 3"
       },
       "visible_in_modes": [
         "box",
@@ -746,7 +746,7 @@
       },
       "tooltip": {
         "en": "Outer box Z-height. AOCL spec: ~26 mm (~2.6 cm). Clamped to minimum rack height automatically.",
-        "es": "Altura exterior en Z de la caja. Especificaci\u00f3n AOCL: ~26 mm (~2.6 cm). Se ajusta autom\u00e1ticamente al m\u00ednimo del rack."
+        "es": "Altura exterior en Z de la caja. Especificación AOCL: ~26 mm (~2.6 cm). Se ajusta automáticamente al mínimo del rack."
       },
       "visible_in_modes": [
         "box",
@@ -762,11 +762,11 @@
       "default": true,
       "label": {
         "en": "Snap-Fit Lid",
-        "es": "Tapa a Presi\u00f3n"
+        "es": "Tapa a Presión"
       },
       "tooltip": {
         "en": "Generate snap-fit cantilever latch arms on lid (PLA-safe 15 mm arm)",
-        "es": "Generar brazos de pestillo voladizo a presi\u00f3n en la tapa (brazo 15 mm seguro para PLA)"
+        "es": "Generar brazos de pestillo voladizo a presión en la tapa (brazo 15 mm seguro para PLA)"
       },
       "visible_in_modes": [
         "box",
@@ -789,7 +789,7 @@
       },
       "tooltip": {
         "en": "0 = auto (fast draft); higher = more detail + slot numbers engraved, but slower render",
-        "es": "0 = autom\u00e1tico (borrador r\u00e1pido); mayor = m\u00e1s detalle + n\u00fameros de ranura grabados, pero renderizado m\u00e1s lento"
+        "es": "0 = automático (borrador rápido); mayor = más detalle + números de ranura grabados, pero renderizado más lento"
       },
       "visible_in_modes": [
         "holder",
@@ -810,6 +810,9 @@
   },
   "export_formats": [
     "stl",
-    "3mf"
+    "3mf",
+    "off",
+    "glb",
+    "obj"
   ]
 }
