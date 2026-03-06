@@ -54,7 +54,7 @@ wall_thickness = 2.0; // Thickness of the standard plastic walls
 // 1. Rack Footprint Math
 _crossbar_h = 2.5; // Height of the bottom floor/crossbars in the rack
 _min_rib_w = 2.75; // Width of the plastic separators (ribs) holding the slides
-_slot_w = custom_slide_thickness + tolerance_z + 0.2; // How wide the actual opening needs to be for the slide
+_slot_w = custom_slide_thickness + 2 * tolerance_z; // Matches slide_slot_width() in aocl_lib.scad
 _pitch = _slot_w + _min_rib_w; // "Pitch" is the distance from the start of one slot to the start of the next one
 _base_h = _crossbar_h; // Where the slide sits vertically in the rack (on top of the crossbars)
 
@@ -124,7 +124,7 @@ module slide() {
 // Module: Creates one field of glass slides for a single rack (positional only, no rack body)
 module slides_for_rack() {
   for (i = [0:num_slots - 1]) {
-    translate([wall_thickness + i * _pitch + _min_rib_w + (_slot_w - custom_slide_thickness) / 2, wall_thickness + tolerance_xy / 2, _base_h])
+    translate([wall_thickness + i * _pitch + _min_rib_w + (_slot_w - custom_slide_thickness) / 2, wall_thickness + tolerance_xy / 2, _base_h + 0.01])
       slide();
   }
 }

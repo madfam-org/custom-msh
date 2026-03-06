@@ -139,20 +139,13 @@ module rack_body() {
     cube([_body_x, _body_y, wall_thickness]);
   }
 
-  // Generate an array of plastic ribs along the front rail
-  translate([_pillar_w, 0, _base_h]) {
-    for (i = [0:num_slots]) {
-      // Loop over every slot and move the X coordinate by the "pitch" to space it out
-      translate([i * _pitch, 0, 0])
-        slide_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
-    }
-  }
-
-  // Generate an identical array of plastic ribs along the back rail
-  translate([_pillar_w, _body_y - _pillar_w, _base_h]) {
+  // Single array of full-depth divider fins spanning the entire inner cavity.
+  // Positioned at the Y-centre of the inner cavity so each rib runs from the
+  // front wall inner face to the back wall inner face (_slot_depth deep).
+  translate([_pillar_w, _pillar_w + _slot_depth / 2, _base_h]) {
     for (i = [0:num_slots]) {
       translate([i * _pitch, 0, 0])
-        slide_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+        slide_retention_rib(height=_rib_height, depth=_slot_depth, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
     }
   }
 
