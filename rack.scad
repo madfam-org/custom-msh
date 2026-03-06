@@ -65,10 +65,14 @@ _body_y = custom_slide_length + (2 * _pillar_w) + tolerance_xy;
 _base_h = open_bottom == 1 ? _crossbar_h : wall_thickness; // Thickness of the floor
 _body_z = _rib_height + _base_h; // Total height of the skeleton frame
 
-// Handles and labels sizing math
-_handle_w = min(_body_x * 0.7, 70);
-_handle_h = 14;
-_handle_thick = 3.5;
+// Side wall extended arch variables for integrated handles
+_leg_w = 4.5; // Width of the solid handle support pillars on the left/right faces
+_grip_h = 5; // Thickness of the top grip bar
+_holey = max(10, _body_y - 2 * _leg_w); // The wide finger cutout length
+_arch_height = (handle == 1) ? max(25, (_holey/2) + _grip_h + 5) : 0; // Total added height for the handle hole
+_wall_z = _body_z + _arch_height; // The true ceiling height of the side walls
+
+// Labels sizing math
 _label_w = min(30, _body_x * 0.5);
 _label_h = min(10, _body_z * 0.4);
 _num_size = min(2.5, _pitch * 0.7);
@@ -77,17 +81,46 @@ _num_size = min(2.5, _pitch * 0.7);
 
 // Builds the structural lattice (skeleton) of the rack and populates the retention ribs inside
 module rack_body() {
-  // Construct upper structural rim frame (the top rectangle)
-  translate([0, 0, _body_z - _crossbar_h]) cube([_body_x, _pillar_w, _crossbar_h]); // Front
-  translate([0, _body_y - _pillar_w, _body_z - _crossbar_h]) cube([_body_x, _pillar_w, _crossbar_h]); // Back
-  translate([0, 0, _body_z - _crossbar_h]) cube([_pillar_w, _body_y, _crossbar_h]); // Left
-  translate([_body_x - _pillar_w, 0, _body_z - _crossbar_h]) cube([_pillar_w, _body_y, _crossbar_h]); // Right
+  // Solid Left wall (with handle cutout if enabled)
+  difference() {
+    cube([_pillar_w, _body_y, _wall_z]);
+    if (handle == 1) {
+      // 45-degree arched cutout for the fingers
+      _holex = _pillar_w + 0.2; // Extra depth to punch through cleanly
+      _rect_h = max(0, (_wall_z - _body_z - _grip_h) - (_holey/2));
+      
+      translate([-0.1, _leg_w, _body_z]) {
+        // Base rectangle for the fingers
+        if (_rect_h > 0) cube([_holex, _holey, _rect_h]);
+        
+        // 45-degree peaked roof to avoid bridging
+        translate([0, 0, _rect_h])
+          hull() {
+             cube([_holex, _holey, 0.01]);
+             translate([0, _holey/2, _holey/2]) cube([_holex, 0.01, 0.01]);
+          }
+      }
+    }
+  }
 
-  // Construct 4 corner pillars connecting the top frame to the bottom base
-  cube([_pillar_w, _pillar_w, _body_z]);
-  translate([_body_x - _pillar_w, 0, 0]) cube([_pillar_w, _pillar_w, _body_z]);
-  translate([0, _body_y - _pillar_w, 0]) cube([_pillar_w, _pillar_w, _body_z]);
-  translate([_body_x - _pillar_w, _body_y - _pillar_w, 0]) cube([_pillar_w, _pillar_w, _body_z]);
+  // Solid Right wall (with identical handle cutout if enabled)
+  translate([_body_x - _pillar_w, 0, 0]) difference() {
+    cube([_pillar_w, _body_y, _wall_z]);
+    if (handle == 1) {
+      _holex = _pillar_w + 0.2;
+      _rect_h = max(0, (_wall_z - _body_z - _grip_h) - (_holey/2));
+      
+      translate([-0.1, _leg_w, _body_z]) {
+        if (_rect_h > 0) cube([_holex, _holey, _rect_h]);
+        
+        translate([0, 0, _rect_h])
+          hull() {
+             cube([_holex, _holey, 0.01]);
+             translate([0, _holey/2, _holey/2]) cube([_holex, 0.01, 0.01]);
+          }
+      }
+    }
+  }
 
   // Bottom plate (either a skeletal frame or a solid floor based on `open_bottom` setting)
   if (open_bottom == 1) {
@@ -123,19 +156,7 @@ module rack_body() {
     }
   }
 
-  // Draw the overhead carrying handle if enabled
-  if (handle == 1) {
-    // Center the handle mathematically above the rack
-    _hx = (_body_x - _handle_w) / 2;
-    _hy = (_body_y - _handle_thick) / 2;
-    _hz = _body_z;
-    // Left handle stem
-    translate([_hx, _hy, _hz]) cube([_handle_thick, _handle_thick, _handle_h]);
-    // Right handle stem
-    translate([_hx + _handle_w - _handle_thick, _hy, _hz]) cube([_handle_thick, _handle_thick, _handle_h]);
-    // Top horizontal crossbar connecting the stems
-    translate([_hx, _hy, _hz + _handle_h - _handle_thick]) cube([_handle_w, _handle_thick, _handle_thick]);
-  }
+  // Removed external overhead handle logic; handled natively within side walls now
 }
 
 // Extrudes standard numerical text (e.g. 1 2 3...) on the frame to identify sample locations

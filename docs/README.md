@@ -8,7 +8,7 @@ Official Visualizer and Configurator: Yantra4D
 
 Visualizador y configurador oficial: Yantra4D*
 
-**Version**: 2.0.0  
+**Version**: 2.1.0  
 **Slug**: `custom-msh`
 
 ## Modes
@@ -30,7 +30,7 @@ Visualizador y configurador oficial: Yantra4D*
 | `label_area` | checkbox | Yes |  | Debossed recess for handwritten or adhesive label |
 | `chamfer_pocket` | checkbox | Yes |  | 45° chamfer at pocket entry to guide substrate insertion |
 | `num_slots` | slider | 10 | 5–15 | Number of substrate positions per rack. AOCL spec: 10 |
-| `handle` | checkbox | Yes |  | Integrated handle arch for carrying the rack |
+| `handle` | checkbox | Yes |  | Integrated FDM-printable carrying arch sculpted into each side wall — no external handle or support material required |
 | `open_bottom` | checkbox | Yes |  | Open crossbar base (less material, easier cleaning) vs. solid floor |
 | `drainage_angle` | slider | 5 | 0–15 | Slope for fluid runoff (0 = flat). Reserved for future use. |
 | `numbering_start` | slider | 1 | 1–100 | First slot number engraved on the rack. Requires Quality ($fn) > 0. |

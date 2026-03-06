@@ -60,7 +60,7 @@ When you see the tables below, they are derived from this manifest.
 
 ## Project Specifications 
 
-**Version**: 2.0.0  
+**Version**: 2.1.0  
 **Slug**: `custom-msh`  
 **License**: CERN-OHL-W-2.0  
 **Official Configurator**: [Yantra4D](https://github.com/madfam-org/yantra4d)
@@ -88,7 +88,7 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 | `label_area` | checkbox | Yes | - | Subtracts a debossed recess for adding a handwritten or adhesive label |
 | `chamfer_pocket` | checkbox | Yes | - | Adds a 45° chamfer at pocket entry to guide substrate insertion |
 | `num_slots` | slider | 10 | 5–15 | Number of substrate positions per rack. |
-| `handle` | checkbox | Yes | - | Appends an integrated handle arch for carrying the rack |
+| `handle` | checkbox | Yes | - | Sculpts an integrated FDM-printable carrying arch into each side wall via a 45° peaked `hull()` void — no external handle or support material required |
 | `open_bottom` | checkbox | Yes | - | Toggles an open crossbar base (less material, cleanable) vs. solid floor |
 | `drainage_angle` | slider | 5 | 0–15 | Slope for fluid runoff (0 = flat). Reserved for future use. |
 | `numbering_start` | slider | 1 | 1–100 | First slot number engraved on the rack. Requires high polygon quality. |
