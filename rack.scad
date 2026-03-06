@@ -70,8 +70,7 @@ _body_z = _rib_height + _base_h; // Total height of the skeleton frame
 _leg_w = 4.5; // Width of the solid handle support pillars on the left/right faces
 _grip_h = 5; // Thickness of the top grip bar
 _holey = max(10, _body_y - 2 * _leg_w); // The wide finger cutout length
-_arch_height = (handle == 1) ? max(25, (_holey/2) + _grip_h + 5) : 0; // Total added height for the handle hole
-_wall_z = _body_z + _arch_height; // The true ceiling height of the side walls
+_wall_z = _body_z; // Wall height is always _body_z; arch is carved within, not added on top
 
 // Labels sizing math
 _label_w = min(30, _body_x * 0.5);
