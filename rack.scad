@@ -35,6 +35,7 @@ open_bottom = 1; // 1 = True (base is open gaps to let liquids drain), 0 = solid
 drainage_angle = 5; // Tilt angle (reserved for future fluid drainage features)
 label_area = 1; // Add a recess for a label sticker
 numbering_start = 1; // The first number engraved above the slide slots (e.g., 1 to 10)
+divider_style = 1; // 0 = stub ribs (2mm front+back rails only, faster print); 1 = full-depth fins (span entire cavity, true slide separation)
 fn = 32; // Curved geometry quality. Defaults to 32.
 $fn = fn > 0 ? fn : 32;
 
@@ -139,13 +140,28 @@ module rack_body() {
     cube([_body_x, _body_y, wall_thickness]);
   }
 
-  // Single array of full-depth divider fins spanning the entire inner cavity.
-  // Positioned at the Y-centre of the inner cavity so each rib runs from the
-  // front wall inner face to the back wall inner face (_slot_depth deep).
-  translate([_pillar_w, _pillar_w + _slot_depth / 2, _base_h]) {
+  // --- Dividers ---
+  // The outer translate X is shifted +_min_rib_w/2 so divider i=0's left edge sits flush
+  // with the left wall's inner face, and divider i=num_slots's right edge sits flush with
+  // the right wall's inner face — achieving perfect X-axis symmetry around _body_x/2.
+  //
+  // Y is centred at _pillar_w + _slot_depth/2 = _body_y/2 for perfect Y-axis symmetry.
+  translate([_pillar_w + _min_rib_w / 2, _pillar_w + _slot_depth / 2, _base_h]) {
     for (i = [0:num_slots]) {
-      translate([i * _pitch, 0, 0])
-        slide_retention_rib(height=_rib_height, depth=_slot_depth, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+      translate([i * _pitch, 0, 0]) {
+        if (divider_style == 0) {
+          // Stub-rib mode: two thin 2mm-deep stubs per divider (front rail + back rail).
+          // Minimal material — fast to print. Slides are only retained at their edges.
+          translate([0, -(_slot_depth / 2 - _pillar_w / 2), 0])
+            slide_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+          translate([0,  (_slot_depth / 2 - _pillar_w / 2), 0])
+            slide_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+        } else {
+          // Full-depth fin mode: one continuous fin spanning the entire inner cavity depth.
+          // True slide separation visible from all angles; preferred for staining use.
+          slide_retention_rib(height=_rib_height, depth=_slot_depth, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+        }
+      }
     }
   }
 
@@ -159,11 +175,12 @@ module slot_numbers() {
     for (i = [0:num_slots - 1]) {
       // Current slot number to display
       _num = numbering_start + i;
-      // Get the X coordinate corresponding to this specific slot
-      _rib_x = _pillar_w + (i * _pitch);
+      // Slot i centre X = left_wall + full_rib_width + half_slot + i*pitch
+      // (accounts for the _min_rib_w/2 symmetry offset applied to the divider translate)
+      _slot_center_x = _pillar_w + _min_rib_w + _slot_w / 2 + i * _pitch;
 
-      // Position the number precisely above the front of each slot opening
-      translate([_rib_x + _num_size / 2 + 0.4, -0.01, _base_h + _rib_height * 0.4])
+      // Position the number centred on the slot opening at the front face
+      translate([_slot_center_x, -0.01, _base_h + _rib_height * 0.4])
         rotate([90, 0, 0]) // Stand the text up facing the front
           linear_extrude(height=0.5) // Punch it out by 0.5mm so it's readable
             text(str(_num), size=_num_size, halign="center", valign="center", font="Liberation Sans:style=Bold");

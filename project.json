@@ -293,7 +293,8 @@
         "handle": 1,
         "open_bottom": 1,
         "drainage_angle": 5,
-        "numbering_start": 1
+        "numbering_start": 1,
+        "divider_style": 1
       }
     },
     {
@@ -340,7 +341,8 @@
         "wall_thickness": 2.0,
         "handle": 1,
         "open_bottom": 1,
-        "stack_along_y": 0
+        "stack_along_y": 0,
+        "divider_style": 1
       }
     },
     {
@@ -689,6 +691,24 @@
       ],
       "group": "rack",
       "visibility_level": "advanced"
+    },
+    {
+      "id": "divider_style",
+      "type": "checkbox",
+      "default": true,
+      "label": {
+        "en": "Full-Depth Fins",
+        "es": "Aletas de Profundidad Completa"
+      },
+      "tooltip": {
+        "en": "ON = full-depth fin dividers spanning the entire rack cavity (true slide separation, preferred for staining). OFF = shallow stub ribs at front+back rails only (faster print, less material).",
+        "es": "Activado = aletas divisorias de profundidad completa (separación real de sustratos). Desactivado = nervios cortos en rieles frontal y trasero (impresión más rápida, menos material)."
+      },
+      "visible_in_modes": [
+        "rack",
+        "assembly"
+      ],
+      "group": "rack"
     },
     {
       "id": "num_racks",
