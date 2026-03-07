@@ -143,27 +143,40 @@ module box_base() {
         _hx_len = _box_y - (_hex_frame * 2);
         _hx_hei = _box_z - (_hex_frame * 2) - 4; // Extra clearance from top
         
-        // Let's create a bounding box of hexes to remove
+        // Subtract honeycomb hex pattern from left and right walls
         if (_hx_hei > 5 && _hx_len > 5) {
-          translate([-1, _hex_frame, _hex_frame])
-            cube([wall_thickness+2, _hx_len, _hx_hei])
-              intersection() { // Keep hex cuts cleanly within the box
-                cube([wall_thickness+2, _hx_len, _hx_hei]);
-                translate([0,0,0])
-                  xrot(90) zrot(90)
-                  grid_copies(spacing=[_hex_d+1, _hex_d+1.5], size=[_hx_len*1.5, _hx_hei*1.5], stagger=true)
-                    cylinder(d=_hex_d, h=wall_thickness+4, $fn=6);
-              };
-              
-          translate([_box_x - wall_thickness - 1, _hex_frame, _hex_frame])
-             cube([wall_thickness+2, _hx_len, _hx_hei])
-               intersection() {
-                 cube([wall_thickness+2, _hx_len, _hx_hei]);
-                 translate([0,0,0])
-                   xrot(90) zrot(90)
-                   grid_copies(spacing=[_hex_d+1, _hex_d+1.5], size=[_hx_len*1.5, _hx_hei*1.5], stagger=true)
-                     cylinder(d=_hex_d, h=wall_thickness+4, $fn=6);
-               };
+          _hex_sp_y = _hex_d + 1;
+          _hex_sp_z = _hex_d + 1.5;
+          _hex_cols = floor(_hx_len / _hex_sp_y);
+          _hex_rows = floor(_hx_hei / _hex_sp_z);
+          _hex_oy = (_hx_len - _hex_cols * _hex_sp_y) / 2;
+          _hex_oz = (_hx_hei - _hex_rows * _hex_sp_z) / 2;
+
+          // Left wall hex cutouts
+          for (row = [0:_hex_rows - 1])
+            for (col = [0:_hex_cols - 1]) {
+              _stagger = (row % 2 == 1) ? _hex_sp_y / 2 : 0;
+              _cy = _hex_frame + _hex_oy + col * _hex_sp_y + _hex_sp_y / 2 + _stagger;
+              _cz = _hex_frame + _hex_oz + row * _hex_sp_z + _hex_sp_z / 2;
+              if (_cy > _hex_frame + _hex_d/2 && _cy < _box_y - _hex_frame - _hex_d/2 &&
+                  _cz > _hex_frame + _hex_d/2 && _cz < _box_z - _hex_frame - _hex_d/2 - 4)
+                translate([-1, _cy, _cz])
+                  rotate([0, 90, 0])
+                    cylinder(d=_hex_d, h=wall_thickness+2, $fn=6);
+            }
+
+          // Right wall hex cutouts
+          for (row = [0:_hex_rows - 1])
+            for (col = [0:_hex_cols - 1]) {
+              _stagger = (row % 2 == 1) ? _hex_sp_y / 2 : 0;
+              _cy = _hex_frame + _hex_oy + col * _hex_sp_y + _hex_sp_y / 2 + _stagger;
+              _cz = _hex_frame + _hex_oz + row * _hex_sp_z + _hex_sp_z / 2;
+              if (_cy > _hex_frame + _hex_d/2 && _cy < _box_y - _hex_frame - _hex_d/2 &&
+                  _cz > _hex_frame + _hex_d/2 && _cz < _box_z - _hex_frame - _hex_d/2 - 4)
+                translate([_box_x - wall_thickness - 1, _cy, _cz])
+                  rotate([0, 90, 0])
+                    cylinder(d=_hex_d, h=wall_thickness+2, $fn=6);
+            }
         }
       }
 
@@ -185,16 +198,16 @@ module box_base() {
     // Finally, subtract the huge core cubic volume for the main internal cavity!
     translate([wall_thickness, wall_thickness, wall_thickness])
       cube([_inner_x, _inner_y, _inner_z + 1]);
-  }
 
-  // Deduct a labeling recess volume from the front shell surface
-  if (label_area == 1) {
-    _lbl_w = min(40, _box_x * 0.45);
-    _lbl_h = min(10, _box_z * 0.35);
-    translate([(_box_x - _lbl_w) / 2, -0.01, (_box_z - _lbl_h) / 2])
-      rotate([90, 0, 0])
-        translate([0, 0, -0.4])
-          aocl_label_recess(_lbl_w, _lbl_h, 0.5);
+    // Subtract a labeling recess from the front shell surface
+    if (label_area == 1) {
+      _lbl_w = min(40, _box_x * 0.45);
+      _lbl_h = min(10, _box_z * 0.35);
+      translate([(_box_x - _lbl_w) / 2, -0.01, (_box_z - _lbl_h) / 2])
+        rotate([90, 0, 0])
+          translate([0, 0, -0.4])
+            aocl_label_recess(_lbl_w, _lbl_h, 0.5);
+    }
   }
 }
 
