@@ -93,5 +93,6 @@ module holder_body() {
 }
 
 // Top-level instantiation
-// This tells OpenSCAD to actually build and show the `holder_body` on the screen!
-holder_body();
+// render_mode guard: only render when compiled directly (mode 0) or without explicit mode
+render_mode = 0;
+if (render_mode == 0) holder_body();

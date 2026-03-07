@@ -209,6 +209,8 @@ module rack_complete() {
   slot_numbers();
 }
 
-// Default Render 
-// (This only triggers if you compile rack.scad directly. If imported by assembly.scad, it safely ignores this)
-rack_complete();
+// Default Render
+// render_mode guard: only render when compiled directly (mode 1) or without explicit mode.
+// (If imported by assembly.scad via `use`, this top-level code is safely ignored.)
+render_mode = 1;
+if (render_mode == 1) rack_complete();

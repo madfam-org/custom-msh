@@ -47,10 +47,10 @@ render_mode = 0;
 _min_rib_w = 2.75;
 _slot_w = slot_width(custom_slide_thickness, tolerance_z); // Gap width
 _pitch = pitch(_slot_w, _min_rib_w); // Distance required per slot
-_num_slots = 10;
+num_slots = 10; // Substrate slots per rack (matches rack.scad default)
 _pillar_w = wall_thickness;
 
-_rack_x = (_num_slots * _pitch) + _min_rib_w + (2 * _pillar_w); // Total Rack Width
+_rack_x = (num_slots * _pitch) + _min_rib_w + (2 * _pillar_w); // Total Rack Width
 _rack_y = custom_slide_length + (2 * _pillar_w) + tolerance_xy; // Total Rack Length
 _slot_depth = custom_slide_width + tolerance_xy;
 _crossbar_h = 2.5;

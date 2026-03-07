@@ -13,6 +13,7 @@
 // "use" allows us to call modules from other files without executing their global code.
 use <rack.scad>
 use <box.scad>
+use <aocl_lib.scad>
 
 // "include" brings in an external library entirely (BOSL2 here provides advanced shapes if needed).
 include <../../libs/BOSL2/std.scad>
@@ -47,6 +48,7 @@ tolerance_z = 0.2; // Wiggle room top and bottom
 num_slots = 10; // How many slides fit into one rack
 num_racks = 3; // How many racks fit into one box
 wall_thickness = 2.0; // Thickness of the standard plastic walls
+box_depth_target = 26.0; // Desired outer box Z-height (matches box.scad parameter)
 
 // --- Math & Alignment Variables ---
 // We calculate the exact footprint of the objects so we know where to place them.
@@ -54,8 +56,8 @@ wall_thickness = 2.0; // Thickness of the standard plastic walls
 // 1. Rack Footprint Math
 _crossbar_h = 2.5; // Height of the bottom floor/crossbars in the rack
 _min_rib_w = 2.75; // Width of the plastic separators (ribs) holding the slides
-_slot_w = custom_slide_thickness + 2 * tolerance_z; // Matches slide_slot_width() in aocl_lib.scad
-_pitch = _slot_w + _min_rib_w; // "Pitch" is the distance from the start of one slot to the start of the next one
+_slot_w = slide_slot_width(custom_slide_thickness, tolerance_z); // Use aocl_lib function
+_pitch = slide_pitch(_slot_w, _min_rib_w); // Use aocl_lib function
 _base_h = _crossbar_h; // Where the slide sits vertically in the rack (on top of the crossbars)
 
 // Calculating the entire width (X) and length (Y) of *one* full rack
@@ -77,7 +79,7 @@ _inner_y =
   (stack_along_y) ? (num_racks * (_rack_y + _rack_clearance) + _rack_clearance)
   : (_rack_y + _rack_clearance * 2);
 
-_inner_z = max(26.0 - 2 * wall_thickness, _rack_z + _rack_clearance);
+_inner_z = max(box_depth_target - 2 * wall_thickness, _rack_z + _rack_clearance);
 
 // 3. Lid Positioning Math
 // We need to know where the outer edges of the box are to snap the lid perfectly over it.
@@ -89,6 +91,9 @@ _lid_wall = 1.5; // The thickness of the lid's walls
 _o_y = _box_y + _lid_clearance * 2 + _lid_wall * 2; // Outer dimension for the lid
 
 // --- Box module variables (required by box_base/box_lid via `use`) ---
+// OpenSCAD `use` only imports modules, NOT variables. These MUST mirror
+// the corresponding values in box.scad to ensure assembly renders correctly.
+// If box.scad changes any of these, update here too.
 snap_lid = 1; // Creates locking latch hooks (1 = True)
 label_area = 1; // Indents a space for writing labels
 fn = 32;

@@ -43,7 +43,7 @@ git clone --recursive https://github.com/madfam-org/custom-msh.git
 
 ## Technical Architecture
 
-This repository contains the OpenSCAD generators for a custom substrate holder system tailored for the 1×1 inch AOCL standard. It includes a single holder, a 10-slot rack, and a 3-rack storage box.
+This repository contains the OpenSCAD generators for a custom substrate holder system tailored for the 1×1 inch AOCL standard. It includes a single holder, a 10-slot staining rack, a 3-rack storage box with snap-fit lid, and assembly views.
 
 ### The Yantra4D Manifest ([`project.json`](./project.json))
 
@@ -70,9 +70,11 @@ When you see the tables below, they are derived from this manifest.
 | ID | Label | SCAD File | Parts | Description |
 |---|---|---|---|---|
 | `holder` | Single Holder | [`holder.scad`](./holder.scad) | holder_body | Generates a single AOCL substrate holder. |
-| `rack` | 10-Slot Rack | [`rack.scad`](./rack.scad) | rack | Generates a rack holding multiple substrates. |
-| `box` | 3-Rack Box | [`box.scad`](./box.scad) | box_base, box_lid | Generates an outer enclosure for racks. |
-| `assembly`| Assembly | [`assembly.scad`](./assembly.scad) | rack, box_base, box_lid | Generates an interactive combined assembly view. |
+| `rack` | Staining Rack | [`rack.scad`](./rack.scad) | rack | Generates a rack holding multiple substrates. |
+| `box` | Racks Box | [`box.scad`](./box.scad) | box_base, box_lid | Generates an outer enclosure for racks (base + lid). |
+| `base` | Box Base | [`box.scad`](./box.scad) | box_base | Box base only (for single-piece printing). |
+| `lid` | Box Lid | [`box.scad`](./box.scad) | box_lid | Box lid only (for single-piece printing). |
+| `assembly`| Assembly | [`assembly.scad`](./assembly.scad) | rack, box_base, box_lid, slides | Interactive combined assembly view with glass substrates. |
 | `library`| CDG Library | [`aocl_lib.scad`](./aocl_lib.scad) | N/A | Core underlying geometry math & shapes (imported by others). |
 
 ### Parameters & Data Standards
@@ -81,10 +83,13 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 
 | Name | Type | Default | Range | Description |
 |---|---|---|---|---|
+| `assembly_level` | slider | 3 | 1–3 | Assembly detail level (1=rack+slides, 2=+box, 3=+lid). Hidden parameter. |
 | `substrate_size` | slider | 25.4 | 24.0–27.0 (step 0.1) | Square substrate side length. **AOCL spec: 25.4 mm (1 inch)** |
+| `stack_along_y` | checkbox | No | - | Stack racks along Y-axis instead of X-axis |
 | `tolerance_xy` | slider | 0.4 | 0.1–0.8 (step 0.05) | Horizontal clearance added to pocket/slot openings for FDM shrinkage |
 | `tolerance_z` | slider | 0.2 | 0.05–0.5 (step 0.05) | Slot width clearance over substrate thickness |
 | `wall_thickness` | slider | 2.0 | 1.2–4.0 (step 0.2) | Outer structural wall and pillar thickness |
+| `holder_thickness` | slider | 2.0 | 1.0–30.0 (step 0.5) | Total Z height of the holder block |
 | `label_area` | checkbox | Yes | - | Subtracts a debossed recess for adding a handwritten or adhesive label |
 | `chamfer_pocket` | checkbox | Yes | - | Adds a 45° chamfer at pocket entry to guide substrate insertion |
 | `num_slots` | slider | 10 | 5–15 | Number of substrate positions per rack. |
@@ -92,28 +97,32 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 | `open_bottom` | checkbox | Yes | - | Toggles an open crossbar base (less material, cleanable) vs. solid floor |
 | `drainage_angle` | slider | 5 | 0–15 | Slope for fluid runoff (0 = flat). Reserved for future use. |
 | `numbering_start` | slider | 1 | 1–100 | First slot number engraved on the rack. Requires high polygon quality. |
+| `divider_style` | checkbox | Yes | - | Full-depth fins (ON) vs. stub ribs at front+back only (OFF) |
 | `num_racks` | slider | 3 | 1–5 | How many racks the box accommodates. |
 | `box_depth_target` | slider | 26.0 | 24.0–40.0 (step 0.5) | Outer box Z-height. Clamped to minimum rack height automatically. |
 | `snap_lid` | checkbox | Yes | - | Generates snap-fit cantilever latch arms on the lid. |
-| `fn` | slider | 0 | 0–64 (step 8) | Polygon resolution. 0 = auto (fast draft). Higher = slower but detailed. |
+| `fn` | slider | 32 | 0–64 (step 8) | Polygon resolution. 0 = auto (fast draft). Higher = slower but detailed. |
 
 ### Configurator Presets
 
-- **AOCL Default (1"×1", 10 slots, 3 racks)**
-  `substrate_size`=25.4, `num_slots`=10, `num_racks`=3, `tolerance_xy`=0.4, `tolerance_z`=0.2, `wall_thickness`=2.0, `label_area`=1, `snap_lid`=1, `handle`=1, `open_bottom`=1
-- **Tight Tolerance (precision printer)**
-  `substrate_size`=25.4, `tolerance_xy`=0.2, `tolerance_z`=0.1, `wall_thickness`=2.0
-- **Loose Tolerance (easy extraction)**
-  `substrate_size`=25.4, `tolerance_xy`=0.6, `tolerance_z`=0.3, `wall_thickness`=2.0
+| Preset | Modes |
+|---|---|
+| **Default Holder** | holder |
+| **Default Staining Rack** | rack |
+| **Default Racks Box** | box, base, lid |
+| **Staining rack WITH slides** | assembly (level 1) |
+| **Racks box WITH racks & slides (no lid)** | assembly (level 2) |
+| **Racks box WITH racks & slides (with lid)** | assembly (level 3) |
 
 ### Color Identifiers
 
-| ID | Label | Default Color |
-|---|---|---|
-| `holder_body` | Holder Body | `#4a90d9` |
-| `rack` | Rack | `#e5e7eb` |
-| `box_base` | Box Base | `#4a90d9` |
-| `box_lid` | Box Lid | `#6b7280` |
+| ID | Label | Default Color | Notes |
+|---|---|---|---|
+| `holder_body` | Holder Body | `#4a90d9` | |
+| `rack` | Rack | `#e5e7eb` | |
+| `box_base` | Box Base | `#4a90d9` | |
+| `box_lid` | Box Lid | `#6b7280` | |
+| `slides` | Slides | `#cce8f4` | glass: true |
 
 ---
 *Generated alongside `project.json` for integration with Yantra4D*
