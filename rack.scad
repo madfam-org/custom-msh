@@ -52,6 +52,7 @@ _pitch = slide_pitch(_slot_w, _min_rib_w); // Distance required per slot_w, _min
 // Determine the height of the ribs based on how deep the slide sits in it
 _slot_depth = substrate_width + tolerance_xy;
 _rib_height = _slot_depth;
+_cavity_y = substrate_length + tolerance_xy;  // Inner cavity Y-span (front-to-back)
 _chamfer_h = min(1.5, _rib_height * 0.15); // Slope at the top of the rib for guiding slides in
 
 // Structural elements sizing (the skeleton framework)
@@ -145,21 +146,21 @@ module rack_body() {
   // with the left wall's inner face, and divider i=num_slots's right edge sits flush with
   // the right wall's inner face — achieving perfect X-axis symmetry around _body_x/2.
   //
-  // Y is centred at _pillar_w + _slot_depth/2 = _body_y/2 for perfect Y-axis symmetry.
-  translate([_pillar_w + _min_rib_w / 2, _pillar_w + _slot_depth / 2, _base_h]) {
+  // Y is centred at _pillar_w + _cavity_y/2 = _body_y/2 for perfect Y-axis symmetry.
+  translate([_pillar_w + _min_rib_w / 2, _pillar_w + _cavity_y / 2, _base_h]) {
     for (i = [0:num_slots]) {
       translate([i * _pitch, 0, 0]) {
         if (divider_style == 0) {
           // Stub-rib mode: two thin 2mm-deep stubs per divider (front rail + back rail).
           // Minimal material — fast to print. Slides are only retained at their edges.
-          translate([0, -(_slot_depth / 2 - _pillar_w / 2), 0])
+          translate([0, -(_cavity_y / 2 - _pillar_w / 2), 0])
             slide_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
-          translate([0,  (_slot_depth / 2 - _pillar_w / 2), 0])
+          translate([0,  (_cavity_y / 2 - _pillar_w / 2), 0])
             slide_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
         } else {
           // Full-depth fin mode: one continuous fin spanning the entire inner cavity depth.
           // True slide separation visible from all angles; preferred for staining use.
-          slide_retention_rib(height=_rib_height, depth=_slot_depth, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+          slide_retention_rib(height=_rib_height, depth=_cavity_y, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
         }
       }
     }

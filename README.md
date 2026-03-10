@@ -60,7 +60,7 @@ When you see the tables below, they are derived from this manifest.
 
 ## Project Specifications 
 
-**Version**: 2.3.0  
+**Version**: 2.3.1  
 **Slug**: `custom-msh`  
 **License**: CERN-OHL-W-2.0  
 **Official Configurator**: [Yantra4D](https://github.com/madfam-org/yantra4d)
