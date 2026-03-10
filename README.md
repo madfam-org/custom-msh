@@ -18,10 +18,10 @@ Why do we need Hyperobjects? Because of **Common Denominator Geometry (CDG)**.
 
 Originating in aerospace engineering, CDG is the idea that to build complex systems, you need a shared, mathematically rigorous "truth" or interface. In the realm of additive manufacturing, CDG represents the standardized interfaces—the rails, grids, threads, and sockets—that allow a globally distributed community to build compatible infrastructure without centralized coordination.
 
-For this project, the **CDG** is the specific width, clearance, and interaction profile to hold a standard **AOCL (1-inch x 1-inch, or 25.4mm x 25.4mm) microscope slide/substrate**. 
+For this project, the **CDG** is the specific length, width, clearance, and interaction profile to hold a standard **AOCL microscope slide/substrate** (default 25.4mm × 25.4mm, supporting rectangular slides up to 76mm × 52mm).
 
 By standardizing this interface in open code:
-- You know that *any* variation you generate will securely hold the industry-standard glass slide.
+- You know that *any* variation you generate will securely hold the glass slide for its configured dimensions.
 - You can adjust tolerances for different 3D printers or materials, without breaking the core functionality.
 - You empower a "right to repair" and open science ecosystem independent of proprietary, rigid commercial lab hardware.
 
@@ -60,7 +60,7 @@ When you see the tables below, they are derived from this manifest.
 
 ## Project Specifications 
 
-**Version**: 2.1.0  
+**Version**: 2.2.0  
 **Slug**: `custom-msh`  
 **License**: CERN-OHL-W-2.0  
 **Official Configurator**: [Yantra4D](https://github.com/madfam-org/yantra4d)
@@ -79,12 +79,13 @@ When you see the tables below, they are derived from this manifest.
 
 ### Parameters & Data Standards
 
-The following interactive parameters define the bounds of this hyperobject. Notice how the core CDG (the AOCL 25.4mm substrate size) is exposed but defaults to the industry standard.
+The following interactive parameters define the bounds of this hyperobject. Notice how the core CDG (the AOCL substrate dimensions) is exposed but defaults to the industry standard.
 
 | Name | Type | Default | Range | Description |
 |---|---|---|---|---|
 | `assembly_level` | slider | 3 | 1–3 | Assembly detail level (1=rack+slides, 2=+box, 3=+lid). Hidden parameter. |
-| `substrate_size` | slider | 25.4 | 24.0–27.0 (step 0.1) | Square substrate side length. **AOCL spec: 25.4 mm (1 inch)** |
+| `substrate_length` | slider | 25.4 | 15.0–76.0 (step 0.1) | Substrate dimension along the rack's Y-axis (front-to-back). **AOCL square: 25.4 mm; standard slide: 76 mm** |
+| `substrate_width` | slider | 25.4 | 15.0–52.0 (step 0.1) | Substrate dimension along the rack's Z-axis (slot depth). **AOCL square: 25.4 mm; standard slide: 26 mm** |
 | `stack_along_y` | checkbox | No | - | Stack racks along Y-axis instead of X-axis |
 | `tolerance_xy` | slider | 0.4 | 0.1–0.8 (step 0.05) | Horizontal clearance added to pocket/slot openings for FDM shrinkage |
 | `tolerance_z` | slider | 0.2 | 0.05–0.5 (step 0.05) | Slot width clearance over substrate thickness |

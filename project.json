@@ -2,7 +2,7 @@
   "project": {
     "name": "Custom MSH (AOCL)",
     "slug": "custom-msh",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": {
       "en": "Custom substrate holder system for 1×1 inch substrates (AOCL) — holder, 10-slot rack, 3-rack storage box, and assembly views.\n\nOfficial Visualizer and Configurator: Yantra4D",
       "es": "Sistema portamuestras para sustratos de 1×1 pulgada (AOCL) — soporte individual, rack de 10 ranuras, caja para 3 racks y vistas de ensamblaje.\n\nVisualizador y configurador oficial: Yantra4D"
@@ -32,7 +32,8 @@
         "geometry_type": "pocket",
         "standard": "internal/aocl",
         "parameters": [
-          "substrate_size",
+          "substrate_length",
+          "substrate_width",
           "tolerance_xy",
           "tolerance_z"
         ]
@@ -266,7 +267,8 @@
       },
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2v20\"/><path d=\"M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6\"/></svg>",
       "values": {
-        "substrate_size": 25.4,
+        "substrate_length": 25.4,
+        "substrate_width": 25.4,
         "holder_thickness": 2.0,
         "tolerance_xy": 0.4,
         "tolerance_z": 0.2,
@@ -286,7 +288,8 @@
       },
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 6h16\"/><path d=\"M4 12h16\"/><path d=\"M4 18h16\"/><path d=\"M8 4v16\"/><path d=\"M16 4v16\"/></svg>",
       "values": {
-        "substrate_size": 25.4,
+        "substrate_length": 25.4,
+        "substrate_width": 25.4,
         "num_slots": 10,
         "tolerance_xy": 0.4,
         "tolerance_z": 0.2,
@@ -311,7 +314,8 @@
       },
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
       "values": {
-        "substrate_size": 25.4,
+        "substrate_length": 25.4,
+        "substrate_width": 25.4,
         "num_racks": 3,
         "box_depth_target": 26.0,
         "snap_lid": 1,
@@ -334,7 +338,8 @@
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m21 16-9 5-9-5\"/><path d=\"m21 8-9 5-9-5\"/><path d=\"m12 18-9-5 9-5 9 5z\"/></svg>",
       "values": {
         "assembly_level": 1,
-        "substrate_size": 25.4,
+        "substrate_length": 25.4,
+        "substrate_width": 25.4,
         "num_slots": 10,
         "num_racks": 3,
         "tolerance_xy": 0.4,
@@ -358,7 +363,8 @@
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
       "values": {
         "assembly_level": 2,
-        "substrate_size": 25.4,
+        "substrate_length": 25.4,
+        "substrate_width": 25.4,
         "num_slots": 10,
         "num_racks": 3,
         "tolerance_xy": 0.4,
@@ -383,7 +389,8 @@
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
       "values": {
         "assembly_level": 3,
-        "substrate_size": 25.4,
+        "substrate_length": 25.4,
+        "substrate_width": 25.4,
         "num_slots": 10,
         "num_racks": 3,
         "tolerance_xy": 0.4,
@@ -418,19 +425,44 @@
       "visibility_level": "hidden"
     },
     {
-      "id": "substrate_size",
+      "id": "substrate_length",
       "type": "slider",
       "default": 25.4,
-      "min": 24.0,
-      "max": 27.0,
+      "min": 15.0,
+      "max": 76.0,
       "step": 0.1,
       "label": {
-        "en": "Substrate Size (mm)",
-        "es": "Tamaño Sustrato (mm)"
+        "en": "Substrate Length (mm)",
+        "es": "Largo del Sustrato (mm)"
       },
       "tooltip": {
-        "en": "Square substrate side length. AOCL spec: 25.4 mm (1 inch)",
-        "es": "Lado del sustrato cuadrado. Especificación AOCL: 25.4 mm (1 pulgada)"
+        "en": "Substrate dimension along the rack's Y-axis (front-to-back). AOCL square spec: 25.4 mm (1 inch). Standard microscope slide: 76 mm.",
+        "es": "Dimensión del sustrato en el eje Y del rack (frente-fondo). Especificación AOCL cuadrado: 25.4 mm (1 pulgada). Portaobjetos estándar: 76 mm."
+      },
+      "visible_in_modes": [
+        "holder",
+        "rack",
+        "box",
+        "assembly",
+        "base",
+        "lid"
+      ],
+      "group": "substrate"
+    },
+    {
+      "id": "substrate_width",
+      "type": "slider",
+      "default": 25.4,
+      "min": 15.0,
+      "max": 52.0,
+      "step": 0.1,
+      "label": {
+        "en": "Substrate Width (mm)",
+        "es": "Ancho del Sustrato (mm)"
+      },
+      "tooltip": {
+        "en": "Substrate dimension along the rack's Z-axis (slot depth). AOCL square spec: 25.4 mm (1 inch). Standard microscope slide: 26 mm.",
+        "es": "Dimensión del sustrato en el eje Z del rack (profundidad de ranura). Especificación AOCL cuadrado: 25.4 mm (1 pulgada). Portaobjetos estándar: 26 mm."
       },
       "visible_in_modes": [
         "holder",
@@ -847,8 +879,8 @@
       {
         "id": "aocl_substrate",
         "label": {
-          "en": "AOCL 1\"x1\" Glass Substrate (25.4mm, 1mm thick borosilicate)",
-          "es": "Sustrato de Vidrio AOCL 1\"x1\" (25.4mm, 1mm de grosor, borosilicato)"
+          "en": "Glass Substrate (default 25.4×25.4 mm, 1 mm thick borosilicate). Supports rectangular slides.",
+          "es": "Sustrato de Vidrio (predeterminado 25.4×25.4 mm, 1 mm de grosor, borosilicato). Soporta sustratos rectangulares."
         },
         "quantity_formula": "num_slots * num_racks"
       }

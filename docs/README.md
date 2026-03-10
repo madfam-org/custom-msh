@@ -1,14 +1,14 @@
 # Custom MSH (AOCL)
 
-Custom substrate holder system for 1x1 inch substrates (AOCL) -- holder, 10-slot staining rack, 3-rack storage box with snap-fit lid, and assembly views.
+Custom substrate holder system for AOCL substrates (default 25.4×25.4 mm, supports rectangular slides) -- holder, 10-slot staining rack, 3-rack storage box with snap-fit lid, and assembly views.
 
 Official Visualizer and Configurator: Yantra4D
 
-*Sistema portamuestras para sustratos de 1x1 pulgada (AOCL) -- soporte individual, rack de tincion de 10 ranuras, caja para 3 racks con tapa a presion, y vistas de ensamblaje.*
+*Sistema portamuestras para sustratos AOCL (predeterminado 25.4×25.4 mm, soporta sustratos rectangulares) -- soporte individual, rack de tincion de 10 ranuras, caja para 3 racks con tapa a presion, y vistas de ensamblaje.*
 
 *Visualizador y configurador oficial: Yantra4D*
 
-**Version**: 2.1.0
+**Version**: 2.2.0
 **Slug**: `custom-msh`
 **License**: CERN-OHL-W-2.0
 
@@ -28,7 +28,8 @@ Official Visualizer and Configurator: Yantra4D
 | Name | Type | Default | Range | Modes | Description |
 |---|---|---|---|---|---|
 | `assembly_level` | slider | 3 | 1-3 | (hidden) | Assembly detail level (1=rack+slides, 2=+box, 3=+lid) |
-| `substrate_size` | slider | 25.4 | 24.0-27.0 (step 0.1) | all | Square substrate side length (mm). AOCL spec: 25.4 mm |
+| `substrate_length` | slider | 25.4 | 15.0-76.0 (step 0.1) | all | Substrate length along rack Y-axis (mm). AOCL square: 25.4 mm; standard slide: 76 mm |
+| `substrate_width` | slider | 25.4 | 15.0-52.0 (step 0.1) | all | Substrate width along rack Z-axis (mm). AOCL square: 25.4 mm; standard slide: 26 mm |
 | `stack_along_y` | checkbox | No | | box, assembly, base, lid | Stack racks along Y-axis instead of X-axis |
 | `tolerance_xy` | slider | 0.4 | 0.1-0.8 (step 0.05) | all | Horizontal clearance for FDM shrinkage compensation |
 | `tolerance_z` | slider | 0.2 | 0.05-0.5 (step 0.05) | rack, assembly | Slot width clearance over substrate thickness |
@@ -73,7 +74,7 @@ Official Visualizer and Configurator: Yantra4D
 - **Domain**: medical
 - **License**: CERN-OHL-W-2.0
 - **CDG Interfaces**:
-  - `aocl_substrate_pocket` (pocket) -- AOCL 1"x1" substrate retention geometry
+  - `aocl_substrate_pocket` (pocket) -- AOCL substrate retention geometry (supports rectangular substrates)
   - `snap_latch_interface` (snap) -- Snap-fit lid latch mechanism
 - **Societal Benefit**: Enables fabrication of a precision substrate retention system for AOCL laboratory workflows -- independent of commercial supply chains.
 

@@ -19,8 +19,8 @@ include <../../libs/BOSL2/hinges.scad>
 // --- Configuration Parameters ---
 
 // Accommodated slide dimensions (Standard 1 inch AOCL slides)
-custom_slide_length = 25.4;
-custom_slide_width = 25.4;
+substrate_length = 25.4;
+substrate_width = 25.4;
 custom_slide_thickness = 1.0;
 
 // Fits and Tolerances (Wiggle room for 3D printing accuracy)
@@ -51,8 +51,8 @@ num_slots = 10; // Substrate slots per rack (matches rack.scad default)
 _pillar_w = wall_thickness;
 
 _rack_x = (num_slots * _pitch) + _min_rib_w + (2 * _pillar_w); // Total Rack Width
-_rack_y = custom_slide_length + (2 * _pillar_w) + tolerance_xy; // Total Rack Length
-_slot_depth = custom_slide_width + tolerance_xy;
+_rack_y = substrate_length + (2 * _pillar_w) + tolerance_xy; // Total Rack Length
+_slot_depth = substrate_width + tolerance_xy;
 _crossbar_h = 2.5;
 
 _rack_z = _slot_depth + _crossbar_h; // Height without handle

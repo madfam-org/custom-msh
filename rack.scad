@@ -19,8 +19,8 @@ include <../../libs/BOSL2/std.scad>
 // These variables act as the control panel for the 3D model.
 
 // Standard slide dimensions (25.4mm = 1 inch)
-custom_slide_length = 25.4;
-custom_slide_width = 25.4;
+substrate_length = 25.4;
+substrate_width = 25.4;
 custom_slide_thickness = 1.0;
 
 // Clearances and walls for 3D printing tolerances
@@ -49,7 +49,7 @@ _slot_w = slide_slot_width(custom_slide_thickness, tolerance_z); // Gap width
 _pitch = slide_pitch(_slot_w, _min_rib_w); // Distance required per slot_w, _min_rib_w);
 
 // Determine the height of the ribs based on how deep the slide sits in it
-_slot_depth = custom_slide_width + tolerance_xy;
+_slot_depth = substrate_width + tolerance_xy;
 _rib_height = _slot_depth;
 _chamfer_h = min(1.5, _rib_height * 0.15); // Slope at the top of the rib for guiding slides in
 
@@ -62,7 +62,7 @@ _crossbar_h = 2.5; // Base crossbar height
 // The X axis spans all slots + all ribs + the two end walls
 _body_x = (num_slots * _pitch) + _min_rib_w + (2 * _pillar_w);
 // The Y axis spans the length of the slide + tolerances + front/back walls
-_body_y = custom_slide_length + (2 * _pillar_w) + tolerance_xy;
+_body_y = substrate_length + (2 * _pillar_w) + tolerance_xy;
 _base_h = open_bottom == 1 ? _crossbar_h : wall_thickness; // Thickness of the floor
 _body_z = _rib_height + _base_h; // Total height of the skeleton frame
 

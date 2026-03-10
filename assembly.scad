@@ -40,8 +40,8 @@ stack_along_y = 0; // If 1, expand box along the Y-axis instead of the X-axis
 // Note: We redefine the core measurements here so that our assembly math perfectly 
 // aligns with the separate source files without having to pass variables around globally.
 
-custom_slide_length = 25.4; // Standard AOCL slide length (25.4mm = 1 inch)
-custom_slide_width = 25.4; // Standard AOCL slide width
+substrate_length = 25.4; // Standard AOCL slide length (25.4mm = 1 inch)
+substrate_width = 25.4; // Standard AOCL slide width
 custom_slide_thickness = 1.0; // Standard AOCL glass slide thickness
 tolerance_xy = 0.4; // Wiggle room left and right to allow for 3D printer imprecision
 tolerance_z = 0.2; // Wiggle room top and bottom
@@ -62,11 +62,11 @@ _base_h = _crossbar_h; // Where the slide sits vertically in the rack (on top of
 
 // Calculating the entire width (X) and length (Y) of *one* full rack
 _rack_x = (num_slots * _pitch) + _min_rib_w + (2 * wall_thickness);
-_rack_y = custom_slide_length + (2 * wall_thickness) + tolerance_xy;
+_rack_y = substrate_length + (2 * wall_thickness) + tolerance_xy;
 _rack_clearance = 0.5; // Wiggle room between the rack & the box guide rails
 
 // Calculating the exact height (Z) of *one* full rack
-_slot_depth = custom_slide_width + tolerance_xy;
+_slot_depth = substrate_width + tolerance_xy;
 _rack_z = _slot_depth + _crossbar_h;
 
 // 2. Box Cavity Math
@@ -123,7 +123,7 @@ _label_h = min(18, _box_y * 0.35);
 module slide() {
   // We use RGBA color: Red=0.8, Green=0.9, Blue=0.95, Alpha (transparency)=0.6
   color([0.8, 0.9, 0.95, 0.6])
-    cube([custom_slide_thickness, custom_slide_length, custom_slide_width]);
+    cube([custom_slide_thickness, substrate_length, substrate_width]);
 }
 
 // Module: Creates one field of glass slides for a single rack (positional only, no rack body)
