@@ -77,7 +77,7 @@ _wall_z = _body_z; // Wall height is always _body_z; arch is carved within, not 
 // Labels sizing math
 _label_w = min(30, _body_x * 0.5);
 _label_h = min(10, _body_z * 0.4);
-_num_size = min(2.5, _pitch * 0.7);
+_num_size = min(2.5, _pitch * 0.7, _base_h * 0.85);
 
 // --- Core Modules ---
 
@@ -180,10 +180,11 @@ module slot_numbers() {
       // (accounts for the _min_rib_w/2 symmetry offset applied to the divider translate)
       _slot_center_x = _pillar_w + _min_rib_w + _slot_w / 2 + i * _pitch;
 
-      // Position the number centred on the slot opening at the front face
-      translate([_slot_center_x, -0.01, _base_h + _num_size * 0.6])
-        rotate([90, 0, 0]) // Stand the text up facing the front
-          linear_extrude(height=0.5) // Punch it out by 0.5mm so it's readable
+      // Position the number on the front face of the base rail, extruding
+      // 0.4mm INTO the rail (ensuring union/merge) + 0.5mm outward (raised text).
+      translate([_slot_center_x, 0.4, _base_h / 2])
+        rotate([90, 0, 0])
+          linear_extrude(height=0.9)
             text(str(_num), size=_num_size, halign="center", valign="center", font="Liberation Sans:style=Bold");
     }
   }
