@@ -36,6 +36,7 @@ drainage_angle = 5; // Tilt angle (reserved for future fluid drainage features)
 label_area = 1; // Add a recess for a label sticker
 numbering_start = 1; // The first number engraved above the slide slots (e.g., 1 to 10)
 divider_style = 1; // 0 = stub ribs (2mm front+back rails only, faster print); 1 = full-depth fins (span entire cavity, true slide separation)
+show_numbers = 1; // 1 = True (engrave slot numbers on front face), 0 = False
 fn = 32; // Curved geometry quality. Defaults to 32.
 $fn = fn > 0 ? fn : 32;
 
@@ -169,7 +170,7 @@ module rack_body() {
 
 // Extrudes standard numerical text (e.g. 1 2 3...) on the frame to identify sample locations
 module slot_numbers() {
-  if (fn > 0) {
+  if (show_numbers == 1 && fn > 0) {
     // Only generate numbers if high quality is enabled, to save compute
     for (i = [0:num_slots - 1]) {
       // Current slot number to display
@@ -179,7 +180,7 @@ module slot_numbers() {
       _slot_center_x = _pillar_w + _min_rib_w + _slot_w / 2 + i * _pitch;
 
       // Position the number centred on the slot opening at the front face
-      translate([_slot_center_x, -0.01, _base_h + _rib_height * 0.4])
+      translate([_slot_center_x, -0.01, _base_h + _num_size * 0.6])
         rotate([90, 0, 0]) // Stand the text up facing the front
           linear_extrude(height=0.5) // Punch it out by 0.5mm so it's readable
             text(str(_num), size=_num_size, halign="center", valign="center", font="Liberation Sans:style=Bold");

@@ -2,7 +2,7 @@
   "project": {
     "name": "Custom MSH (AOCL)",
     "slug": "custom-msh",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "description": {
       "en": "Custom substrate holder system for 1×1 inch substrates (AOCL) — holder, 10-slot rack, 3-rack storage box, and assembly views.\n\nOfficial Visualizer and Configurator: Yantra4D",
       "es": "Sistema portamuestras para sustratos de 1×1 pulgada (AOCL) — soporte individual, rack de 10 ranuras, caja para 3 racks y vistas de ensamblaje.\n\nVisualizador y configurador oficial: Yantra4D"
@@ -704,6 +704,24 @@
       "visibility_level": "advanced"
     },
     {
+      "id": "show_numbers",
+      "type": "checkbox",
+      "default": true,
+      "label": {
+        "en": "Show Slot Numbers",
+        "es": "Mostrar Números de Ranura"
+      },
+      "tooltip": {
+        "en": "Engrave slot identification numbers on the front face of the rack. Also requires Quality ($fn) > 0.",
+        "es": "Grabar números de identificación de ranura en la cara frontal del rack. También requiere Calidad ($fn) > 0."
+      },
+      "visible_in_modes": [
+        "rack",
+        "assembly"
+      ],
+      "group": "rack"
+    },
+    {
       "id": "numbering_start",
       "type": "slider",
       "default": 1,
@@ -715,8 +733,8 @@
         "es": "Numeración Inicial"
       },
       "tooltip": {
-        "en": "First slot number engraved on the rack. Requires Quality ($fn) > 0.",
-        "es": "Primer número de ranura grabado en el rack. Requiere Calidad ($fn) > 0."
+        "en": "First slot number engraved on the rack. Requires Show Slot Numbers ON and Quality ($fn) > 0.",
+        "es": "Primer número de ranura grabado en el rack. Requiere Mostrar Números activado y Calidad ($fn) > 0."
       },
       "visible_in_modes": [
         "rack",

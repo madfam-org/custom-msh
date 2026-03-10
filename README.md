@@ -60,7 +60,7 @@ When you see the tables below, they are derived from this manifest.
 
 ## Project Specifications 
 
-**Version**: 2.2.0  
+**Version**: 2.3.0  
 **Slug**: `custom-msh`  
 **License**: CERN-OHL-W-2.0  
 **Official Configurator**: [Yantra4D](https://github.com/madfam-org/yantra4d)
@@ -97,7 +97,8 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 | `handle` | checkbox | Yes | - | Sculpts an integrated FDM-printable carrying arch into each side wall via a 45° peaked `hull()` void — no external handle or support material required |
 | `open_bottom` | checkbox | Yes | - | Toggles an open crossbar base (less material, cleanable) vs. solid floor |
 | `drainage_angle` | slider | 5 | 0–15 | Slope for fluid runoff (0 = flat). Reserved for future use. |
-| `numbering_start` | slider | 1 | 1–100 | First slot number engraved on the rack. Requires high polygon quality. |
+| `show_numbers` | checkbox | Yes | - | Engrave slot identification numbers on the front face. Also requires Quality ($fn) > 0. |
+| `numbering_start` | slider | 1 | 1–100 | First slot number engraved on the rack. Requires Show Slot Numbers ON and Quality ($fn) > 0. |
 | `divider_style` | checkbox | Yes | - | Full-depth fins (ON) vs. stub ribs at front+back only (OFF) |
 | `num_racks` | slider | 3 | 1–5 | How many racks the box accommodates. |
 | `box_depth_target` | slider | 26.0 | 24.0–40.0 (step 0.5) | Outer box Z-height. Clamped to minimum rack height automatically. |

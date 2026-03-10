@@ -8,7 +8,7 @@ Official Visualizer and Configurator: Yantra4D
 
 *Visualizador y configurador oficial: Yantra4D*
 
-**Version**: 2.2.0
+**Version**: 2.3.0
 **Slug**: `custom-msh`
 **License**: CERN-OHL-W-2.0
 
@@ -41,7 +41,8 @@ Official Visualizer and Configurator: Yantra4D
 | `handle` | checkbox | Yes | | rack, assembly | Integrated carrying handle arch |
 | `open_bottom` | checkbox | Yes | | rack, assembly | Open crossbar base vs. solid floor |
 | `drainage_angle` | slider | 5 | 0-15 | rack | Slope for fluid runoff (reserved) |
-| `numbering_start` | slider | 1 | 1-100 | rack, assembly | First slot number engraved on rack |
+| `show_numbers` | checkbox | Yes | | rack, assembly | Engrave slot numbers on front face. Requires $fn > 0 |
+| `numbering_start` | slider | 1 | 1-100 | rack, assembly | First slot number engraved. Requires show_numbers ON |
 | `divider_style` | checkbox | Yes | | rack, assembly | Full-depth fins (ON) vs. stub ribs (OFF) |
 | `num_racks` | slider | 3 | 1-5 | box, assembly, base, lid | How many racks the box accommodates |
 | `box_depth_target` | slider | 26.0 | 24.0-40.0 (step 0.5) | box, assembly, base, lid | Outer box Z-height. Clamped to min rack height |
