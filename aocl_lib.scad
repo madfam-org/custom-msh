@@ -21,9 +21,6 @@ include <../../libs/BOSL2/std.scad>
 // --- CDG Math Functions ---
 function slide_slot_width(thickness, tolerance) = thickness + 2 * tolerance;
 function slide_pitch(slot_w, rib_w) = slot_w + rib_w;
-function slot_width(thickness, tolerance) = slide_slot_width(thickness, tolerance);
-function pitch(slot_w, rib_w) = slide_pitch(slot_w, rib_w);
-
 // --- Core Modules ---
 // These modules generate physical 3D shapes.
 

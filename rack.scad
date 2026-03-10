@@ -47,7 +47,7 @@ _min_rib_w = 2.75; // The minimum thickness of the plastic dividers holding slid
 
 // Calculate precise slot width and overall pitch (distance from slot to slot)
 _slot_w = slide_slot_width(custom_slide_thickness, tolerance_z); // Gap width
-_pitch = slide_pitch(_slot_w, _min_rib_w); // Distance required per slot_w, _min_rib_w);
+_pitch = slide_pitch(_slot_w, _min_rib_w); // Centre-to-centre distance between adjacent slots
 
 // Determine the height of the ribs based on how deep the slide sits in it
 _slot_depth = substrate_width + tolerance_xy;

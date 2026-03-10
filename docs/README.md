@@ -8,7 +8,7 @@ Official Visualizer and Configurator: Yantra4D
 
 *Visualizador y configurador oficial: Yantra4D*
 
-**Version**: 2.3.1
+**Version**: 2.3.2
 **Slug**: `custom-msh`
 **License**: CERN-OHL-W-2.0
 

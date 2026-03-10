@@ -45,8 +45,8 @@ render_mode = 0;
 // here so the box can dynamically scale to fit them perfectly without importing them.
 
 _min_rib_w = 2.75;
-_slot_w = slot_width(custom_slide_thickness, tolerance_z); // Gap width
-_pitch = pitch(_slot_w, _min_rib_w); // Distance required per slot
+_slot_w = slide_slot_width(custom_slide_thickness, tolerance_z); // Gap width
+_pitch = slide_pitch(_slot_w, _min_rib_w); // Centre-to-centre distance between adjacent slots
 num_slots = 10; // Substrate slots per rack (matches rack.scad default)
 _pillar_w = wall_thickness;
 
@@ -56,8 +56,7 @@ _slot_depth = substrate_width + tolerance_xy;
 _crossbar_h = 2.5;
 
 _rack_z = _slot_depth + _crossbar_h; // Height without handle
-_handle_h = 14;
-_total_rack_h = _rack_z + _handle_h; // Full vertical height of a rack
+_handle_h = 0; // Handle is an internal arch (no protrusion above _rack_z)
 
 // --- Box Cavity Calculations ---
 
