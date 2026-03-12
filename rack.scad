@@ -231,6 +231,12 @@ module slot_numbers() {
         rotate([90, 0, 0])
           linear_extrude(height=0.9)
             text(str(_num), size=_num_size, halign="center", valign="center", font="Liberation Sans:style=Bold");
+
+      // Position the identical number on the back face of the base rail
+      translate([_slot_center_x, _body_y - 0.4, _base_h / 2])
+        rotate([90, 0, 180]) // Flip text 180 deg around Z to face matching orientation outwards
+          linear_extrude(height=0.9)
+            text(str(_num), size=_num_size, halign="center", valign="center", font="Liberation Sans:style=Bold");
     }
   }
 }
