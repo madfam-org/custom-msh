@@ -81,6 +81,9 @@ _guide_h = _crossbar_h + 2;
 _guide_w = 1.5;
 _guide_d = _inner_y;
 
+// Mid-height divider wall between consecutive rack slots
+_div_h = _inner_z / 2; // Rises to the mid-point of the base interior
+
 // Latch arm specifications (for the snap-fit hooks locking the lid to the base)
 _latch_arm_len = 15;
 _latch_arm_w = 8;
@@ -120,6 +123,37 @@ module rack_guide_rails() {
       // Right guide rail for current rack slot
       translate([_rx + _rack_x, wall_thickness, wall_thickness])
         cube([_guide_w, _inner_y, _guide_h]);
+    }
+  }
+}
+
+// Mid-height divider walls between consecutive rack slots (only when num_racks >= 2).
+// Each divider is centred in the clearance gap between rack r and rack r+1,
+// spanning the full perpendicular inner depth at half the inner-cavity height.
+module rack_dividers() {
+  if (num_racks >= 2) {
+    for (r = [0:num_racks - 2]) { // one divider per inter-rack gap
+      if (stack_along_y) {
+        // Racks stacked along Y: divider is a wall parallel to X-Z plane,
+        // placed at the Y gap between rack r (back face) and rack r+1 (front face).
+        _ry_back = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance) + _rack_y;
+        translate([
+          wall_thickness,
+          _ry_back + (_rack_clearance - _guide_w) / 2,
+          wall_thickness
+        ])
+          cube([_inner_x, _guide_w, _div_h]);
+      } else {
+        // Racks stacked along X: divider is a wall parallel to Y-Z plane,
+        // placed at the X gap between rack r (right face) and rack r+1 (left face).
+        _rx_right = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance) + _rack_x;
+        translate([
+          _rx_right + (_rack_clearance - _guide_w) / 2,
+          wall_thickness,
+          wall_thickness
+        ])
+          cube([_guide_w, _inner_y, _div_h]);
+      }
     }
   }
 }
@@ -188,8 +222,9 @@ module box_base() {
           aocl_snap_catch(_latch_arm_w, _latch_hook_h, wall_thickness + _latch_hook_d);
       }
 
-      // 3. Draw the interior sorting rails inside the solid block
+      // 3. Draw the interior sorting rails and mid-height dividers
       rack_guide_rails();
+      rack_dividers();
     }
 
     // Finally, subtract the huge core cubic volume for the main internal cavity!
