@@ -48,7 +48,6 @@ tolerance_z = 0.2; // Wiggle room top and bottom
 num_slots = 10; // How many slides fit into one rack
 num_racks = 3; // How many racks fit into one box
 wall_thickness = 2.0; // Thickness of the standard plastic walls
-box_depth_target = 26.0; // Desired outer box Z-height (matches box.scad parameter)
 
 // --- Math & Alignment Variables ---
 // We calculate the exact footprint of the objects so we know where to place them.
@@ -79,7 +78,8 @@ _inner_y =
   (stack_along_y) ? (num_racks * (_rack_y + _rack_clearance) + _rack_clearance)
   : (_rack_y + _rack_clearance * 2);
 
-_inner_z = max(box_depth_target - 2 * wall_thickness, _rack_z + _rack_clearance);
+// Box base height = exactly half the rack body height
+_inner_z = _rack_z / 2 - wall_thickness;
 
 // 3. Lid Positioning Math
 // We need to know where the outer edges of the box are to snap the lid perfectly over it.
@@ -112,8 +112,8 @@ _latch_hook_h = 2;
 _latch_hook_d = 1.5;
 
 // Lid dimensions
-_handle_h = 0;
-_lid_z = max(12, _handle_h + 2);
+// Lid depth = full outer box height + ceiling thickness, so the skirt reaches the base floor
+_lid_z = _box_z + 1.5;
 _label_w = min(60, _box_x * 0.55);
 _label_h = min(18, _box_y * 0.35);
 

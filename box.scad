@@ -29,7 +29,6 @@ wall_thickness = 2.0;
 
 // Global Setup Configuration
 num_racks = 3; // Determines how wide the box should be to fit this many racks
-box_depth_target = 26.0; // The desired vertical height of the base
 snap_lid = 1; // Creates locking latch hooks (1 = True)
 label_area = 1; // Indents a space for writing labels
 stack_along_y = 0; // If 1, expand box along the Y-axis instead of the X-axis
@@ -69,8 +68,8 @@ _inner_x =
 _inner_y =
   (stack_along_y) ? (num_racks * (_rack_y + _rack_clearance) + _rack_clearance)
   : (_rack_y + _rack_clearance * 2);
-// Box base Z-depth is bounded. It must physically hold the rack body at least.
-_inner_z = max(box_depth_target - 2 * wall_thickness, _rack_z + _rack_clearance);
+// Box base height = exactly half the rack body height (so the lid covers the upper half)
+_inner_z = _rack_z / 2 - wall_thickness;
 
 // Define the absolute outer shell boundaries of the box base
 _box_x = _inner_x + 2 * wall_thickness;
@@ -92,8 +91,8 @@ _latch_hook_d = 1.5;
 // Lid specs (It has slightly different walls than the base)
 _lid_clearance = 0.3; // Wiggle room between lid inner wall and box outer wall
 _lid_wall = 1.5;
-// Target lid depth needs to clear the carrying handles of the racks sitting inside
-_lid_z = max(12, _handle_h + 2);
+// Lid depth = full outer box height + ceiling thickness, so the skirt reaches the base floor
+_lid_z = _box_z + 1.5;
 
 _label_w = min(60, _box_x * 0.55);
 _label_h = min(18, _box_y * 0.35);
