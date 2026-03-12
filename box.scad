@@ -14,7 +14,6 @@ use <aocl_lib.scad>
 
 // Import the Standard BOSL2 Library for advanced geometric shapes like 'cuboid'
 include <../../libs/BOSL2/std.scad>
-include <../../libs/BOSL2/hinges.scad>
 
 // --- Configuration Parameters ---
 
@@ -245,31 +244,6 @@ module box_lid() {
     translate([_o_x / 2 - _latch_arm_w / 2, _o_y - _latch_arm_t, _lid_z])
       mirror([0, 0, 1]) // Point hook descending down explicitly
         aocl_snap_arm(_latch_arm_len, _latch_arm_w, _latch_arm_t, _latch_hook_h, _latch_hook_d);
-  }
-  
-  // Draw the Print-In-Place folding carry handle
-  _handle_len = min(_o_x * 0.5, 40);
-  _handle_wd = 6;
-  _hinge_offs = 3.5;
-  
-  translate([_o_x/2, _o_y/2, _lid_z]) {
-    // 1. Outer statically attached knuckles
-    knuckle_hinge(length=_handle_len, segs=5, offset=_hinge_offs, knuckle_diam=5, in_place=true, fill=true, arm_height=0.5, arm_angle=45, clearance=0.2, anchor=BOTTOM) {
-      // 2. Inner rotating handle arch (Children of the hinge move together)
-      union() {
-        // We build the arch pointing horizontally (Y-axis) lying flat upon the roof for printing
-        _arch_y = min(_o_y * 0.4, 30);
-        translate([-_handle_len/2, 0, -_hinge_offs]) {
-           // Left Stem
-           cube([_handle_wd, _arch_y, _handle_wd]);
-           // Right Stem
-           translate([_handle_len-_handle_wd, 0, 0]) cube([_handle_wd, _arch_y, _handle_wd]);
-           // Top Grip bar
-           translate([0, _arch_y-_handle_wd, 0]) cube([_handle_len, _handle_wd, _handle_wd]);
-        }
-      }
-    }
-  }
 }
 
 // Render the selected discrete part natively based on configuration

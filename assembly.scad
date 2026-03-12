@@ -112,7 +112,7 @@ _latch_hook_h = 2;
 _latch_hook_d = 1.5;
 
 // Lid dimensions
-_handle_h = 14;
+_handle_h = 0;
 _lid_z = max(12, _handle_h + 2);
 _label_w = min(60, _box_x * 0.55);
 _label_h = min(18, _box_y * 0.35);
