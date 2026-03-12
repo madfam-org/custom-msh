@@ -143,44 +143,35 @@ module racks_with_slides() {
   slides_for_rack();
 }
 
-// Module: Renders ONLY the glass slides at their correct assembly positions
+// Module: Renders ONLY the glass slides at their correct assembly positions,
+// always for every rack (num_racks), placed in the box coordinate frame.
+// assembly_level only controls visibility of box/lid — never the slide count.
 module slides_only() {
-  if (assembly_level == 1) {
-    // Single rack with slides
-    slides_for_rack();
-  } else {
-    // Multiple racks inside the box — position matches box_assembly() placement
-    for (r = [0:num_racks - 1]) {
-      if (stack_along_y) {
-        _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
-        translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
-          slides_for_rack();
-      } else {
-        _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
-        translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
-          slides_for_rack();
-      }
+  for (r = [0:num_racks - 1]) {
+    if (stack_along_y) {
+      _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
+      translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
+        slides_for_rack();
+    } else {
+      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
+      translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
+        slides_for_rack();
     }
   }
 }
 
-// Module: Renders ONLY the racks at their correct assembly positions
+// Module: Renders ONLY the racks at their correct assembly positions,
+// always for every rack (num_racks), placed in the box coordinate frame.
 module racks_only() {
-  if (assembly_level == 1) {
-    // Single rack
-    rack_complete();
-  } else {
-    // Multiple racks inside the box — position matches box_assembly() placement
-    for (r = [0:num_racks - 1]) {
-      if (stack_along_y) {
-        _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
-        translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
-          rack_complete();
-      } else {
-        _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
-        translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
-          rack_complete();
-      }
+  for (r = [0:num_racks - 1]) {
+    if (stack_along_y) {
+      _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
+      translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
+        rack_complete();
+    } else {
+      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
+      translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
+        rack_complete();
     }
   }
 }
@@ -209,11 +200,11 @@ module box_assembly() {
 }
 
 // --- Main Execution Logic ---
-// We check the "render_mode" variable configured by the frontend API
-// to decide if we should isolate a specific part to export.
+// render_mode selects which part to isolate; assembly_level controls box/lid visibility.
+// Rack and slide counts always scale with num_racks.
 
 if (render_mode == 1) {
-  // 1 = Rack(s) only — structural body positions
+  // 1 = Rack(s) only
   racks_only();
 } else if (render_mode == 2) {
   // 2 = Box Base
@@ -232,34 +223,25 @@ if (render_mode == 1) {
         box_lid();
   }
 } else if (render_mode == 4) {
-  // 4 = Slides only — AOCL glass substrates positioned in their assembly slots
+  // 4 = Slides only
   slides_only();
 } else {
-  // If no explicit render_mode is given (-1), we render the full visual assembly preview
-  if (assembly_level == 1) {
-    // Mode 1: Render just the single rack with slides.
-    racks_with_slides();
-  } else if (assembly_level == 2) {
-    // Mode 2: Render the open box, filled with racks and slides.
-    box_assembly();
-  } else if (assembly_level == 3) {
-    // Mode 3: Render the whole system capped securely with the lid.
-    box_assembly();
+  // render_mode == -1: full visual assembly preview
+  // Box base and rack/slide fill
+  if (show_base) box_base();
+  racks_only();
+  slides_only();
 
-    // Now we must perfectly place the lid on top of the box.
-    // By default, box_lid() renders rightside-up on the ground.
-    // We move it over (X/Y) to account for wall offsets, and lift it up (Z) to the top of the box.
-    if (show_lid) {
-      translate(
-        [
-          -(_lid_wall + _lid_clearance), // Align left edge
-          -(_lid_wall + _lid_clearance) + _o_y, // Align front edge (handling rotation shift)
-          _box_z + 1.5, // Lift it to the absolute top of the box base
-        ]
-      )
-        // The lid is printed upside down, so we do a 180-degree flip over the X axis to cap the box.
-        rotate([180, 0, 0])
-          box_lid();
-    }
+  // Lid on top (assembly_level == 3)
+  if (show_lid) {
+    translate(
+      [
+        -(_lid_wall + _lid_clearance),
+        -(_lid_wall + _lid_clearance) + _o_y,
+        _box_z + 1.5,
+      ]
+    )
+      rotate([180, 0, 0])
+        box_lid();
   }
 }
