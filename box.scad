@@ -278,6 +278,7 @@ module box_lid() {
     translate([_o_x / 2 - _latch_arm_w / 2, _o_y - _latch_arm_t, _lid_z])
       mirror([0, 0, 1]) // Point hook descending down explicitly
         aocl_snap_arm(_latch_arm_len, _latch_arm_w, _latch_arm_t, _latch_hook_h, _latch_hook_d);
+  }
 }
 
 // Render the selected discrete part natively based on configuration
