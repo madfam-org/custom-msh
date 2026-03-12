@@ -83,6 +83,14 @@ _num_size = min(2.5, _pitch * 0.7, _base_h * 0.85);
 
 // --- Core Modules ---
 
+// Helper module for Additive Manufacturing triangular support ramps
+module am_ramp(w, l, h) {
+    translate([-w/2, 0, 0])
+    rotate([90, 0, 90])
+    linear_extrude(w)
+    polygon([[0,0], [0,h], [l,h]]);
+}
+
 // Builds the structural lattice (skeleton) of the rack and populates the retention ribs inside
 module rack_body() {
   // Solid Left wall (with handle cutout if enabled)
@@ -200,13 +208,15 @@ module rack_body() {
           // Minimal material — fast to print. Slides are only retained at their edges.
           
           if (frame_base_grid == 0) {
+            _stub_ramp_l = min(_base_h, _pillar_w);
             // Front Stub AM Ramp Support
-             translate([0, -(_cavity_y / 2 - _pillar_w / 2), -_base_h])
-               prismoid(size1=[_min_rib_w, _crossbar_w], size2=[_min_rib_w, _pillar_w], h=_base_h, anchor=BOTTOM);
+             translate([0, -(_cavity_y / 2), -_base_h])
+               am_ramp(_min_rib_w, _stub_ramp_l, _base_h);
             
             // Back Stub AM Ramp Support
-             translate([0,  (_cavity_y / 2 - _pillar_w / 2), -_base_h])
-               prismoid(size1=[_min_rib_w, _crossbar_w], size2=[_min_rib_w, _pillar_w], h=_base_h, anchor=BOTTOM);
+             translate([0,  (_cavity_y / 2), -_base_h])
+               rotate([0, 0, 180])
+                 am_ramp(_min_rib_w, _stub_ramp_l, _base_h);
           }
           
           translate([0, -(_cavity_y / 2 - _pillar_w / 2), 0])
@@ -220,12 +230,13 @@ module rack_body() {
           if (frame_base_grid == 0) {
             // Full-Depth Fin AM Ramp Supports (anchoring to front/back crossbars)
              // Front edge of the fin
-             translate([0, -(_cavity_y / 2 - _crossbar_w / 2), -_base_h])
-               prismoid(size1=[_min_rib_w, _crossbar_w], size2=[_min_rib_w, 0.01], h=_base_h, anchor=BOTTOM);
+             translate([0, -(_cavity_y / 2), -_base_h])
+               am_ramp(_min_rib_w, _base_h, _base_h);
                
              // Back edge of the fin
-             translate([0,  (_cavity_y / 2 - _crossbar_w / 2), -_base_h])
-               prismoid(size1=[_min_rib_w, _crossbar_w], size2=[_min_rib_w, 0.01], h=_base_h, anchor=BOTTOM);
+             translate([0,  (_cavity_y / 2), -_base_h])
+               rotate([0, 0, 180])
+                 am_ramp(_min_rib_w, _base_h, _base_h);
           }
 
           slide_retention_rib(height=_actual_rib_height, depth=_cavity_y, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
