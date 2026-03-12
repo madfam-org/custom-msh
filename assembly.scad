@@ -143,35 +143,48 @@ module racks_with_slides() {
   slides_for_rack();
 }
 
-// Module: Renders ONLY the glass slides at their correct assembly positions,
-// always for every rack (num_racks), placed in the box coordinate frame.
-// assembly_level only controls visibility of box/lid — never the slide count.
+// Module: Renders ONLY the glass slides at their correct assembly positions.
+//   assembly_level == 1 → single rack at origin (one rack's slides)
+//   assembly_level >= 2 → num_racks racks in box-frame coordinates
 module slides_only() {
-  for (r = [0:num_racks - 1]) {
-    if (stack_along_y) {
-      _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
-      translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
-        slides_for_rack();
-    } else {
-      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
-      translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
-        slides_for_rack();
+  if (assembly_level == 1) {
+    // Single standalone rack — slides relative to rack origin
+    slides_for_rack();
+  } else {
+    // Multiple racks in the box — loop over all num_racks
+    for (r = [0:num_racks - 1]) {
+      if (stack_along_y) {
+        _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
+        translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
+          slides_for_rack();
+      } else {
+        _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
+        translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
+          slides_for_rack();
+      }
     }
   }
 }
 
-// Module: Renders ONLY the racks at their correct assembly positions,
-// always for every rack (num_racks), placed in the box coordinate frame.
+// Module: Renders ONLY the racks at their correct assembly positions.
+//   assembly_level == 1 → single rack at origin
+//   assembly_level >= 2 → num_racks racks in box-frame coordinates
 module racks_only() {
-  for (r = [0:num_racks - 1]) {
-    if (stack_along_y) {
-      _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
-      translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
-        rack_complete();
-    } else {
-      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
-      translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
-        rack_complete();
+  if (assembly_level == 1) {
+    // Single standalone rack
+    rack_complete();
+  } else {
+    // Multiple racks in the box — loop over all num_racks
+    for (r = [0:num_racks - 1]) {
+      if (stack_along_y) {
+        _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
+        translate([wall_thickness + _rack_clearance, _ry, wall_thickness])
+          rack_complete();
+      } else {
+        _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
+        translate([_rx, wall_thickness + _rack_clearance, wall_thickness])
+          rack_complete();
+      }
     }
   }
 }
@@ -227,21 +240,25 @@ if (render_mode == 1) {
   slides_only();
 } else {
   // render_mode == -1: full visual assembly preview
-  // Box base and rack/slide fill
-  if (show_base) box_base();
-  racks_only();
-  slides_only();
-
-  // Lid on top (assembly_level == 3)
-  if (show_lid) {
-    translate(
-      [
-        -(_lid_wall + _lid_clearance),
-        -(_lid_wall + _lid_clearance) + _o_y,
-        _box_z + 1.5,
-      ]
-    )
-      rotate([180, 0, 0])
-        box_lid();
+  if (assembly_level == 1) {
+    // Single standalone rack with its slides
+    rack_complete();
+    slides_for_rack();
+  } else {
+    // Box with num_racks racks, slides, and optional lid
+    if (show_base) box_base();
+    racks_only();
+    slides_only();
+    if (show_lid) {
+      translate(
+        [
+          -(_lid_wall + _lid_clearance),
+          -(_lid_wall + _lid_clearance) + _o_y,
+          _box_z + 1.5,
+        ]
+      )
+        rotate([180, 0, 0])
+          box_lid();
+    }
   }
 }
