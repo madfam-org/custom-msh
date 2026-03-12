@@ -60,7 +60,7 @@ When you see the tables below, they are derived from this manifest.
 
 ## Project Specifications 
 
-**Version**: 2.3.2  
+**Version**: 2.3.4  
 **Slug**: `custom-msh`  
 **License**: CERN-OHL-W-2.0  
 **Official Configurator**: [Yantra4D](https://github.com/madfam-org/yantra4d)
@@ -86,7 +86,7 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 | `assembly_level` | slider | 3 | 1–3 | Assembly detail level (1=rack+slides, 2=+box, 3=+lid). Hidden parameter. |
 | `substrate_length` | slider | 25.4 | 15.0–76.0 (step 0.1) | Substrate dimension along the rack's Y-axis (front-to-back). **AOCL square: 25.4 mm; standard slide: 76 mm** |
 | `substrate_width` | slider | 25.4 | 15.0–52.0 (step 0.1) | Substrate dimension along the rack's Z-axis (slot depth). **AOCL square: 25.4 mm; standard slide: 26 mm** |
-| `stack_along_y` | checkbox | No | - | Stack racks along Y-axis instead of X-axis |
+| `stack_along_y` | checkbox | Yes | - | Stack racks along Y-axis instead of X-axis |
 | `tolerance_xy` | slider | 0.4 | 0.1–0.8 (step 0.05) | Horizontal clearance added to pocket/slot openings for FDM shrinkage |
 | `tolerance_z` | slider | 0.2 | 0.05–0.5 (step 0.05) | Slot width clearance over substrate thickness |
 | `wall_thickness` | slider | 2.0 | 1.2–4.0 (step 0.2) | Outer structural wall and pillar thickness |
@@ -97,7 +97,7 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 | `handle` | checkbox | Yes | - | Sculpts an integrated FDM-printable carrying arch into each side wall via a 45° peaked `hull()` void — no external handle or support material required |
 | `open_bottom` | checkbox | Yes | - | Toggles an open crossbar base (less material, cleanable) vs. solid floor |
 | `drainage_angle` | slider | 5 | 0–15 | Slope for fluid runoff (0 = flat). Reserved for future use. |
-| `show_numbers` | checkbox | Yes | - | Engrave slot identification numbers on the front face. Also requires Quality ($fn) > 0. |
+| `show_numbers` | checkbox | Yes | - | Engrave slot identification numbers on the front and back faces. Also requires Quality ($fn) > 0. |
 | `numbering_start` | slider | 1 | 1–100 | First slot number engraved on the rack. Requires Show Slot Numbers ON and Quality ($fn) > 0. |
 | `divider_style` | checkbox | Yes | - | Full-depth fins (ON) vs. stub ribs at front+back only (OFF) |
 | `num_racks` | slider | 3 | 1–5 | How many racks the box accommodates. |
