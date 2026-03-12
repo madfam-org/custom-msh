@@ -160,11 +160,12 @@ module rack_dividers() {
 
 // Bottom enclosure shell (Base of the box)
 module box_base() {
-  // Use `difference()` to scoop out an inner cavity from a solid block
-  difference() {
-    union() {
-      // 1. Draw solid outer box shell with rounded bottom edges
-      difference() {
+  union() {
+    // Use `difference()` to scoop out an inner cavity from a solid block
+    difference() {
+      union() {
+        // 1. Draw solid outer box shell with rounded bottom edges
+        difference() {
         cuboid([_box_x, _box_y, _box_z], rounding=1.5, edges=[BOTTOM], anchor=BOTTOM + LEFT + FRONT);
         
         // 1a. Subtract Honeycomb/Voronoi grid from Left and Right sides
@@ -217,29 +218,27 @@ module box_base() {
         translate([_box_x / 2 - _latch_arm_w / 2, -0.01, _box_z - _latch_hook_h - 1])
           aocl_snap_catch(_latch_arm_w, _latch_hook_h, wall_thickness + _latch_hook_d);
 
-        // Back Catch
-        translate([_box_x / 2 - _latch_arm_w / 2, _box_y - wall_thickness - _latch_hook_d + 0.01, _box_z - _latch_hook_h - 1])
-          aocl_snap_catch(_latch_arm_w, _latch_hook_h, wall_thickness + _latch_hook_d);
       }
-
-      // 3. Draw the interior sorting rails and mid-height dividers
-      rack_guide_rails();
-      rack_dividers();
-    }
+    } // End of union for solid outer box shell + ledges
 
     // Finally, subtract the huge core cubic volume for the main internal cavity!
     translate([wall_thickness, wall_thickness, wall_thickness])
-      cube([_inner_x, _inner_y, _inner_z + 1]);
+        cube([_inner_x, _inner_y, _inner_z + 1]);
 
-    // Subtract a labeling recess from the front shell surface
-    if (label_area == 1) {
-      _lbl_w = min(40, _box_x * 0.45);
-      _lbl_h = min(10, _box_z * 0.35);
-      translate([(_box_x - _lbl_w) / 2, -0.01, (_box_z - _lbl_h) / 2])
-        rotate([90, 0, 0])
-          translate([0, 0, -0.4])
-            aocl_label_recess(_lbl_w, _lbl_h, 0.5);
+      // Subtract a labeling recess from the front shell surface
+      if (label_area == 1) {
+        _lbl_w = min(40, _box_x * 0.45);
+        _lbl_h = min(10, _box_z * 0.35);
+        translate([(_box_x - _lbl_w) / 2, -0.01, (_box_z - _lbl_h) / 2])
+          rotate([90, 0, 0])
+            translate([0, 0, -0.4])
+              aocl_label_recess(_lbl_w, _lbl_h, 0.5);
+      }
     }
+
+    // 3. Draw the interior sorting rails and mid-height dividers inside the hollow cavity
+    rack_guide_rails();
+    rack_dividers();
   }
 }
 
