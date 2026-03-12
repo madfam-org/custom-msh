@@ -30,7 +30,7 @@ wall_thickness = 2.0;
 // Global Setup Configuration
 num_racks = 3; // Determines how wide the box should be to fit this many racks
 label_area = 1; // Indents a space for writing labels
-stack_along_y = 0; // If 1, expand box along the Y-axis instead of the X-axis
+stack_along_y = 1; // If 1, expand box along the Y-axis instead of the X-axis
 fn = 32; // Smoothness curve quality. (Default to 32)
 $fn = fn > 0 ? fn : 32;
 
@@ -58,14 +58,16 @@ _handle_h = 0; // Handle is an internal arch (no protrusion above _rack_z)
 // --- Box Cavity Calculations ---
 
 _rack_clearance = 0.5; // Gap between the racks and the box walls
+_guide_w = 1.5; // Thickness of the internal divider walls
+_comp_gap = _rack_clearance * 2 + _guide_w; // Total inter-rack spacing
 
 // Define inner hollow cavity to hold all racks across X, Y, Z dimensions
 _inner_x =
   (stack_along_y) ? (_rack_x + _rack_clearance * 2)
-  : (num_racks * (_rack_x + _rack_clearance) + _rack_clearance);
+  : (num_racks * _rack_x + _rack_clearance * 2 + (num_racks >= 2 ? (num_racks - 1) * _comp_gap : 0));
 
 _inner_y =
-  (stack_along_y) ? (num_racks * (_rack_y + _rack_clearance) + _rack_clearance)
+  (stack_along_y) ? (num_racks * _rack_y + _rack_clearance * 2 + (num_racks >= 2 ? (num_racks - 1) * _comp_gap : 0))
   : (_rack_y + _rack_clearance * 2);
 // Box base cavity height (Low lip)
 _inner_z = 10;
@@ -74,11 +76,6 @@ _inner_z = 10;
 _box_x = _inner_x + 2 * wall_thickness;
 _box_y = _inner_y + 2 * wall_thickness;
 _box_z = _inner_z + wall_thickness;
-
-// Inner dividing rails (little walls printed inside the base to separate the racks)
-_guide_h = _crossbar_h + 2;
-_guide_w = 1.5;
-_guide_d = _inner_y;
 
 // Mid-height divider wall between consecutive rack slots
 _div_h = _inner_z; // Rises to the edge of the base interior lip
@@ -92,53 +89,25 @@ _label_h = min(18, _box_y * 0.35);
 
 // --- Core Modules ---
 
-// Builds internal ribs/walls along the floor to prevent identical racks from colliding laterally
-module rack_guide_rails() {
-  for (r = [0:num_racks - 1]) {
-    if (stack_along_y) {
-      // Stacking along Y-axis: racks are arranged sequentially along Y
-      _ry = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance);
-      // Front guide rail for current rack slot
-      translate([wall_thickness, _ry - _guide_w, wall_thickness])
-        cube([_inner_x, _guide_w, _guide_h]);
-      // Back guide rail for current rack slot
-      translate([wall_thickness, _ry + _rack_y, wall_thickness])
-        cube([_inner_x, _guide_w, _guide_h]);
-    } else {
-      // Stacking along X-axis: racks are arranged sequentially along X
-      _rx = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance);
-      // Left guide rail for current rack slot
-      translate([_rx - _guide_w, wall_thickness, wall_thickness])
-        cube([_guide_w, _inner_y, _guide_h]);
-      // Right guide rail for current rack slot
-      translate([_rx + _rack_x, wall_thickness, wall_thickness])
-        cube([_guide_w, _inner_y, _guide_h]);
-    }
-  }
-}
-
-// Mid-height divider walls between consecutive rack slots (only when num_racks >= 2).
-// Each divider is centred in the clearance gap between rack r and rack r+1,
-// spanning the full perpendicular inner depth at half the inner-cavity height.
+// Mid-height divider walls between consecutive rack slots
+// Each divider is perfectly spaced in the inter-rack gap.
 module rack_dividers() {
   if (num_racks >= 2) {
     for (r = [0:num_racks - 2]) { // one divider per inter-rack gap
       if (stack_along_y) {
-        // Racks stacked along Y: divider is a wall parallel to X-Z plane,
-        // placed at the Y gap between rack r (back face) and rack r+1 (front face).
-        _ry_back = wall_thickness + _rack_clearance + r * (_rack_y + _rack_clearance) + _rack_y;
+        // Racks stacked along Y: divider is a wall parallel to X-Z plane
+        _ry_back = wall_thickness + _rack_clearance + r * (_rack_y + _comp_gap) + _rack_y;
         translate([
           wall_thickness,
-          _ry_back + (_rack_clearance - _guide_w) / 2,
+          _ry_back + _rack_clearance, // perfectly between the two clearances
           wall_thickness
         ])
           cube([_inner_x, _guide_w, _div_h]);
       } else {
-        // Racks stacked along X: divider is a wall parallel to Y-Z plane,
-        // placed at the X gap between rack r (right face) and rack r+1 (left face).
-        _rx_right = wall_thickness + _rack_clearance + r * (_rack_x + _rack_clearance) + _rack_x;
+        // Racks stacked along X: divider is a wall parallel to Y-Z plane
+        _rx_right = wall_thickness + _rack_clearance + r * (_rack_x + _comp_gap) + _rack_x;
         translate([
-          _rx_right + (_rack_clearance - _guide_w) / 2,
+          _rx_right + _rack_clearance,
           wall_thickness,
           wall_thickness
         ])
@@ -171,8 +140,7 @@ module box_base() {
       }
     }
 
-    // 3. Draw the interior sorting rails and mid-height dividers inside the hollow cavity
-    rack_guide_rails();
+    // 3. Draw the mid-height dividers inside the hollow cavity
     rack_dividers();
   }
 }

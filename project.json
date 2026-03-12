@@ -286,7 +286,7 @@
         "tolerance_z": 0.2,
         "wall_thickness": 2.0,
         "label_area": 1,
-        "stack_along_y": 0
+        "stack_along_y": 1
       }
     },
     {
@@ -310,7 +310,7 @@
         "wall_thickness": 2.0,
         "handle": 1,
         "open_bottom": 1,
-        "stack_along_y": 0,
+        "stack_along_y": 1,
         "divider_style": 1,
         "frame_base_grid": 1,
         "side_guards": 1
@@ -337,7 +337,7 @@
         "wall_thickness": 2.0,
         "handle": 1,
         "open_bottom": 1,
-        "stack_along_y": 0,
+        "stack_along_y": 1,
         "frame_base_grid": 1,
         "side_guards": 1
       }
@@ -363,7 +363,7 @@
         "wall_thickness": 2.0,
         "handle": 1,
         "open_bottom": 1,
-        "stack_along_y": 0,
+        "stack_along_y": 1,
         "frame_base_grid": 1,
         "side_guards": 1
       }
@@ -440,7 +440,7 @@
     {
       "id": "stack_along_y",
       "type": "checkbox",
-      "default": 0,
+      "default": 1,
       "label": {
         "en": "Stack Racks Along Y-Axis",
         "es": "Apilar Racks a lo Largo del Eje Y"
