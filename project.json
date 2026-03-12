@@ -106,31 +106,7 @@
         "formula": "constant"
       }
     },
-    {
-      "id": "box",
-      "scad_file": "box.scad",
-      "label": {
-        "en": "Racks Box",
-        "es": "Caja para Racks"
-      },
-      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M3 9h18\"/><path d=\"M9 21V9\"/></svg>",
-      "initial_bbox": {
-        "center_mm": [
-          76.0,
-          17.5,
-          24.0
-        ],
-        "max_dim_mm": 155
-      },
-      "parts": [
-        "box_base",
-        "box_lid"
-      ],
-      "estimate": {
-        "base_units": 1,
-        "formula": "constant"
-      }
-    },
+
     {
       "id": "base",
       "scad_file": "box.scad",
@@ -304,7 +280,6 @@
     {
       "id": "default_box",
       "visible_in_modes": [
-        "box",
         "base",
         "lid"
       ],
@@ -442,7 +417,6 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box",
         "assembly",
         "base",
         "lid"
@@ -467,7 +441,6 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box",
         "assembly",
         "base",
         "lid"
@@ -487,7 +460,6 @@
         "es": "Si está deshabilitado, los racks se ordenan lado a lado en el eje X (caras frontales juntas). Si está habilitado, se ordenan en el eje Y (caras laterales juntas)."
       },
       "visible_in_modes": [
-        "box",
         "assembly",
         "base",
         "lid"
@@ -512,7 +484,6 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box",
         "assembly",
         "base",
         "lid"
@@ -560,7 +531,6 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box",
         "assembly",
         "base",
         "lid"
@@ -602,7 +572,6 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box",
         "base",
         "lid"
       ],
@@ -777,7 +746,6 @@
         "es": "Cuántos racks aloja la caja. Especificación AOCL: 3"
       },
       "visible_in_modes": [
-        "box",
         "assembly",
         "base",
         "lid"
@@ -800,7 +768,6 @@
         "es": "Altura exterior en Z de la caja. Especificación AOCL: ~26 mm (~2.6 cm). Se ajusta automáticamente al mínimo del rack."
       },
       "visible_in_modes": [
-        "box",
         "assembly",
         "base",
         "lid"
@@ -820,7 +787,6 @@
         "es": "Generar brazos de pestillo voladizo a presión en la tapa (brazo 15 mm seguro para PLA)"
       },
       "visible_in_modes": [
-        "box",
         "assembly",
         "base",
         "lid"
@@ -845,7 +811,6 @@
       "visible_in_modes": [
         "holder",
         "rack",
-        "box",
         "assembly",
         "base",
         "lid"
