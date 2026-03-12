@@ -772,8 +772,8 @@
       "type": "checkbox",
       "default": true,
       "label": {
-        "en": "Additive Manufacturing Frame-Base Grid",
-        "es": "Rejilla Base de Marco de Manufactura Aditiva"
+        "en": "Frame-Base Grid",
+        "es": "Rejilla Base de Marco"
       },
       "tooltip": {
         "en": "Make the division fins go all the way to the Z floor",

@@ -217,6 +217,9 @@ module rack_body() {
              translate([0,  (_cavity_y / 2), -_base_h])
                rotate([0, 0, 180])
                  am_ramp(_min_rib_w, _stub_ramp_l, _base_h);
+          } else {
+            // Frame-Base Grid: continuous inner floor rail linking the front and back stub columns
+            prismoid(size1=[_min_rib_w, _cavity_y], size2=[_min_rib_w, _cavity_y], h=_base_h, anchor=BOTTOM);
           }
           
           translate([0, -(_cavity_y / 2 - _pillar_w / 2), 0])
