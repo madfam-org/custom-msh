@@ -29,7 +29,6 @@ wall_thickness = 2.0;
 
 // Global Setup Configuration
 num_racks = 3; // Determines how wide the box should be to fit this many racks
-snap_lid = 1; // Creates locking latch hooks (1 = True)
 label_area = 1; // Indents a space for writing labels
 stack_along_y = 0; // If 1, expand box along the Y-axis instead of the X-axis
 fn = 32; // Smoothness curve quality. (Default to 32)
@@ -68,8 +67,8 @@ _inner_x =
 _inner_y =
   (stack_along_y) ? (num_racks * (_rack_y + _rack_clearance) + _rack_clearance)
   : (_rack_y + _rack_clearance * 2);
-// Box base height = exactly half the rack body height (so the lid covers the upper half)
-_inner_z = _rack_z / 2 - wall_thickness;
+// Box base cavity height (Low lip)
+_inner_z = 10;
 
 // Define the absolute outer shell boundaries of the box base
 _box_x = _inner_x + 2 * wall_thickness;
@@ -82,20 +81,11 @@ _guide_w = 1.5;
 _guide_d = _inner_y;
 
 // Mid-height divider wall between consecutive rack slots
-_div_h = _inner_z / 2; // Rises to the mid-point of the base interior
+_div_h = _inner_z; // Rises to the edge of the base interior lip
 
-// Latch arm specifications (for the snap-fit hooks locking the lid to the base)
-_latch_arm_len = 15;
-_latch_arm_w = 8;
-_latch_arm_t = 1.2;
-_latch_hook_h = 2;
-_latch_hook_d = 1.5;
-
-// Lid specs (It has slightly different walls than the base)
-_lid_clearance = 0.3; // Wiggle room between lid inner wall and box outer wall
-_lid_wall = 1.5;
-// Lid depth = full outer box height + ceiling thickness, so the skirt reaches the base floor
-_lid_z = _box_z + 1.5;
+// Lid specs (Flush fitting)
+// Lid depth = full inner height minus the base lip height + ceiling thickness
+_lid_z = (_rack_z + _rack_clearance) - _inner_z + wall_thickness;
 
 _label_w = min(60, _box_x * 0.55);
 _label_h = min(18, _box_y * 0.35);
@@ -163,66 +153,11 @@ module box_base() {
   union() {
     // Use `difference()` to scoop out an inner cavity from a solid block
     difference() {
-      union() {
-        // 1. Draw solid outer box shell with rounded bottom edges
-        difference() {
-        cuboid([_box_x, _box_y, _box_z], rounding=1.5, edges=[BOTTOM], anchor=BOTTOM + LEFT + FRONT);
-        
-        // 1a. Subtract Honeycomb/Voronoi grid from Left and Right sides
-        // We leave a 5mm solid frame around the top, bottom, and edges so stability isn't ruined
-        _hex_frame = 5;
-        _hex_d = 8;
-        _hx_len = _box_y - (_hex_frame * 2);
-        _hx_hei = _box_z - (_hex_frame * 2) - 4; // Extra clearance from top
-        
-        // Subtract honeycomb hex pattern from left and right walls
-        if (_hx_hei > 5 && _hx_len > 5) {
-          _hex_sp_y = _hex_d + 1;
-          _hex_sp_z = _hex_d + 1.5;
-          _hex_cols = floor(_hx_len / _hex_sp_y);
-          _hex_rows = floor(_hx_hei / _hex_sp_z);
-          _hex_oy = (_hx_len - _hex_cols * _hex_sp_y) / 2;
-          _hex_oz = (_hx_hei - _hex_rows * _hex_sp_z) / 2;
+      // 1. Draw solid outer box shell with rounded bottom edges
+      cuboid([_box_x, _box_y, _box_z], rounding=1.5, edges=[BOTTOM], anchor=BOTTOM + LEFT + FRONT);
 
-          // Left wall hex cutouts
-          for (row = [0:_hex_rows - 1])
-            for (col = [0:_hex_cols - 1]) {
-              _stagger = (row % 2 == 1) ? _hex_sp_y / 2 : 0;
-              _cy = _hex_frame + _hex_oy + col * _hex_sp_y + _hex_sp_y / 2 + _stagger;
-              _cz = _hex_frame + _hex_oz + row * _hex_sp_z + _hex_sp_z / 2;
-              if (_cy > _hex_frame + _hex_d/2 && _cy < _box_y - _hex_frame - _hex_d/2 &&
-                  _cz > _hex_frame + _hex_d/2 && _cz < _box_z - _hex_frame - _hex_d/2 - 4)
-                translate([-1, _cy, _cz])
-                  rotate([0, 90, 0])
-                    cylinder(d=_hex_d, h=wall_thickness+2, $fn=6);
-            }
-
-          // Right wall hex cutouts
-          for (row = [0:_hex_rows - 1])
-            for (col = [0:_hex_cols - 1]) {
-              _stagger = (row % 2 == 1) ? _hex_sp_y / 2 : 0;
-              _cy = _hex_frame + _hex_oy + col * _hex_sp_y + _hex_sp_y / 2 + _stagger;
-              _cz = _hex_frame + _hex_oz + row * _hex_sp_z + _hex_sp_z / 2;
-              if (_cy > _hex_frame + _hex_d/2 && _cy < _box_y - _hex_frame - _hex_d/2 &&
-                  _cz > _hex_frame + _hex_d/2 && _cz < _box_z - _hex_frame - _hex_d/2 - 4)
-                translate([_box_x - wall_thickness - 1, _cy, _cz])
-                  rotate([0, 90, 0])
-                    cylinder(d=_hex_d, h=wall_thickness+2, $fn=6);
-            }
-        }
-      }
-
-      // 2. Build protruding catch mechanisms (ledges) on the front and back for the lid hooks to grab onto
-      if (snap_lid == 1) {
-        // Front Catch
-        translate([_box_x / 2 - _latch_arm_w / 2, -0.01, _box_z - _latch_hook_h - 1])
-          aocl_snap_catch(_latch_arm_w, _latch_hook_h, wall_thickness + _latch_hook_d);
-
-      }
-    } // End of union for solid outer box shell + ledges
-
-    // Finally, subtract the huge core cubic volume for the main internal cavity!
-    translate([wall_thickness, wall_thickness, wall_thickness])
+      // Finally, subtract the huge core cubic volume for the main internal cavity!
+      translate([wall_thickness, wall_thickness, wall_thickness])
         cube([_inner_x, _inner_y, _inner_z + 1]);
 
       // Subtract a labeling recess from the front shell surface
@@ -242,41 +177,67 @@ module box_base() {
   }
 }
 
-// Top cap enclosure that slips over the perimeter of the base locking the system
+// Top cap enclosure that slips over perfectly flush
 module box_lid() {
   // Define lid outer boundaries expanding outside the main box 
-  _o_x = _box_x + _lid_clearance * 2 + _lid_wall * 2;
-  _o_y = _box_y + _lid_clearance * 2 + _lid_wall * 2;
-
-  // Define lid inner cavity enclosing the base perimeter
-  _i_x = _box_x + _lid_clearance * 2;
-  _i_y = _box_y + _lid_clearance * 2;
+  _o_x = _box_x;
+  _o_y = _box_y;
 
   difference() {
     // Draw the overall solid outer lid shell with rounded top edges
     cuboid([_o_x, _o_y, _lid_z], rounding=1.5, edges=[TOP], anchor=BOTTOM + LEFT + FRONT);
 
     // Scoop out the inner empty cavity where the base and rack handles enter
-    translate([_lid_wall, _lid_wall, 1.5]) cube([_i_x, _i_y, _lid_z]);
+    translate([wall_thickness, wall_thickness, -0.01]) cube([_inner_x, _inner_y, _lid_z - wall_thickness + 0.01]);
+
+    // Honeycomb/Voronoi grid from Left and Right sides (moved from base)
+    _hex_frame = 5;
+    _hex_d = 8;
+    _hx_len = _o_y - (_hex_frame * 2);
+    _hx_hei = _lid_z - (_hex_frame * 2) - 4; // Extra clearance from top
+    
+    // Subtract honeycomb hex pattern from left and right walls
+    if (_hx_hei > 5 && _hx_len > 5) {
+      _hex_sp_y = _hex_d + 1;
+      _hex_sp_z = _hex_d + 1.5;
+      _hex_cols = floor(_hx_len / _hex_sp_y);
+      _hex_rows = floor(_hx_hei / _hex_sp_z);
+      _hex_oy = (_hx_len - _hex_cols * _hex_sp_y) / 2;
+      _hex_oz = (_hx_hei - _hex_rows * _hex_sp_z) / 2;
+
+      // Left wall hex cutouts
+      for (row = [0:_hex_rows - 1])
+        for (col = [0:_hex_cols - 1]) {
+          _stagger = (row % 2 == 1) ? _hex_sp_y / 2 : 0;
+          _cy = _hex_frame + _hex_oy + col * _hex_sp_y + _hex_sp_y / 2 + _stagger;
+          _cz = _hex_frame + _hex_oz + row * _hex_sp_z + _hex_sp_z / 2;
+          if (_cy > _hex_frame + _hex_d/2 && _cy < _o_y - _hex_frame - _hex_d/2 &&
+              _cz > _hex_frame + _hex_d/2 && _cz < _lid_z - _hex_frame - _hex_d/2 - 4)
+            translate([-1, _cy, _cz])
+              rotate([0, 90, 0])
+                cylinder(d=_hex_d, h=wall_thickness+2+0.01, $fn=6);
+        }
+
+      // Right wall hex cutouts
+      for (row = [0:_hex_rows - 1])
+        for (col = [0:_hex_cols - 1]) {
+          _stagger = (row % 2 == 1) ? _hex_sp_y / 2 : 0;
+          _cy = _hex_frame + _hex_oy + col * _hex_sp_y + _hex_sp_y / 2 + _stagger;
+          _cz = _hex_frame + _hex_oz + row * _hex_sp_z + _hex_sp_z / 2;
+          if (_cy > _hex_frame + _hex_d/2 && _cy < _o_y - _hex_frame - _hex_d/2 &&
+              _cz > _hex_frame + _hex_d/2 && _cz < _lid_z - _hex_frame - _hex_d/2 - 4)
+            translate([_o_x - wall_thickness - 1, _cy, _cz])
+              rotate([0, 90, 0])
+                cylinder(d=_hex_d, h=wall_thickness+2+0.01, $fn=6);
+        }
+    }
+
 
     // Indent a small label space directly on the ceiling of the lid
     if (label_area) {
       translate([(_o_x - _label_w) / 2, (_o_y - _label_h) / 2, _lid_z - 0.39])
         aocl_label_recess(_label_w, _label_h, 0.4);
     }
-  }
-
-  // Draw two downward-facing cantilever snap hooks to lock into the base catches
-  if (snap_lid) {
-    // Front Hook
-    translate([_o_x / 2 - _latch_arm_w / 2, 0, _lid_z])
-      mirror([0, 0, 1]) // Point hook descending down explicitly
-        aocl_snap_arm(_latch_arm_len, _latch_arm_w, _latch_arm_t, _latch_hook_h, _latch_hook_d);
-
-    // Back hook
-    translate([_o_x / 2 - _latch_arm_w / 2, _o_y - _latch_arm_t, _lid_z])
-      mirror([0, 0, 1]) // Point hook descending down explicitly
-        aocl_snap_arm(_latch_arm_len, _latch_arm_w, _latch_arm_t, _latch_hook_h, _latch_hook_d);
   }
 }
 

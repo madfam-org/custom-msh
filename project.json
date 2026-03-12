@@ -37,18 +37,6 @@
           "tolerance_xy",
           "tolerance_z"
         ]
-      },
-      {
-        "id": "snap_latch_interface",
-        "label": {
-          "en": "Snap-Fit Lid Latch",
-          "es": "Pestillo de Tapa a Presión"
-        },
-        "geometry_type": "snap",
-        "standard": "internal",
-        "parameters": [
-          "snap_lid"
-        ]
       }
     ],
     "commons_license": "CERN-OHL-W-2.0",
@@ -274,7 +262,9 @@
         "open_bottom": 1,
         "drainage_angle": 5,
         "numbering_start": 1,
-        "divider_style": 1
+        "divider_style": 1,
+        "frame_base_grid": 1,
+        "side_guards": 1
       }
     },
     {
@@ -292,7 +282,6 @@
         "substrate_length": 25.4,
         "substrate_width": 25.4,
         "num_racks": 3,
-        "snap_lid": 1,
         "tolerance_xy": 0.4,
         "tolerance_z": 0.2,
         "wall_thickness": 2.0,
@@ -322,7 +311,9 @@
         "handle": 1,
         "open_bottom": 1,
         "stack_along_y": 0,
-        "divider_style": 1
+        "divider_style": 1,
+        "frame_base_grid": 1,
+        "side_guards": 1
       }
     },
     {
@@ -344,10 +335,11 @@
         "tolerance_xy": 0.4,
         "tolerance_z": 0.2,
         "wall_thickness": 2.0,
-        "snap_lid": 1,
         "handle": 1,
         "open_bottom": 1,
-        "stack_along_y": 0
+        "stack_along_y": 0,
+        "frame_base_grid": 1,
+        "side_guards": 1
       }
     },
     {
@@ -369,10 +361,11 @@
         "tolerance_xy": 0.4,
         "tolerance_z": 0.2,
         "wall_thickness": 2.0,
-        "snap_lid": 1,
         "handle": 1,
         "open_bottom": 1,
-        "stack_along_y": 0
+        "stack_along_y": 0,
+        "frame_base_grid": 1,
+        "side_guards": 1
       }
     }
   ],
@@ -750,25 +743,6 @@
       "group": "box"
     },
     {
-      "id": "snap_lid",
-      "type": "checkbox",
-      "default": true,
-      "label": {
-        "en": "Snap-Fit Lid",
-        "es": "Tapa a Presión"
-      },
-      "tooltip": {
-        "en": "Generate snap-fit cantilever latch arms on lid (PLA-safe 15 mm arm)",
-        "es": "Generar brazos de pestillo voladizo a presión en la tapa (brazo 15 mm seguro para PLA)"
-      },
-      "visible_in_modes": [
-        "assembly",
-        "base",
-        "lid"
-      ],
-      "group": "box"
-    },
-    {
       "id": "fn",
       "type": "slider",
       "default": 32,
@@ -792,6 +766,42 @@
       ],
       "group": "quality",
       "visibility_level": "advanced"
+    },
+    {
+      "id": "frame_base_grid",
+      "type": "checkbox",
+      "default": true,
+      "label": {
+        "en": "Additive Manufacturing Frame-Base Grid",
+        "es": "Rejilla Base de Marco de Manufactura Aditiva"
+      },
+      "tooltip": {
+        "en": "Make the division fins go all the way to the Z floor",
+        "es": "Hacer que las aletas de división vayan hasta el piso Z"
+      },
+      "visible_in_modes": [
+        "rack",
+        "assembly"
+      ],
+      "group": "rack"
+    },
+    {
+      "id": "side_guards",
+      "type": "checkbox",
+      "default": true,
+      "label": {
+        "en": "Diamond Grid Side Guards",
+        "es": "Guardas Laterales de Rejilla de Diamante"
+      },
+      "tooltip": {
+        "en": "Mid-height 45-degree diamond grid walls on the sides to prevent substrates from falling out",
+        "es": "Paredes laterales de media altura con rejilla de diamante a 45 grados para evitar que los sustratos se caigan"
+      },
+      "visible_in_modes": [
+        "rack",
+        "assembly"
+      ],
+      "group": "rack"
     }
   ],
   "assembly_steps": [

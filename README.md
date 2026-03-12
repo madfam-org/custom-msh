@@ -101,8 +101,8 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 | `numbering_start` | slider | 1 | 1–100 | First slot number engraved on the rack. Requires Show Slot Numbers ON and Quality ($fn) > 0. |
 | `divider_style` | checkbox | Yes | - | Full-depth fins (ON) vs. stub ribs at front+back only (OFF) |
 | `num_racks` | slider | 3 | 1–5 | How many racks the box accommodates. |
-| `box_depth_target` | slider | 26.0 | 24.0–40.0 (step 0.5) | Outer box Z-height. Clamped to minimum rack height automatically. |
-| `snap_lid` | checkbox | Yes | - | Generates snap-fit cantilever latch arms on the lid. |
+| `frame_base_grid` | checkbox | Yes | - | Forces the divider fins to extend downwards to the absolute Z=0 floor |
+| `side_guards` | checkbox | Yes | - | Generates a 1.5mm 45-degree diamond grid lattice as a mid-height retaining wall along the rack sides |
 | `fn` | slider | 32 | 0–64 (step 8) | Polygon resolution. 0 = auto (fast draft). Higher = slower but detailed. |
 
 ### Configurator Presets

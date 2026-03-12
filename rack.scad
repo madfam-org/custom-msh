@@ -37,6 +37,8 @@ label_area = 1; // Add a recess for a label sticker
 numbering_start = 1; // The first number engraved above the slide slots (e.g., 1 to 10)
 divider_style = 1; // 0 = stub ribs (2mm front+back rails only, faster print); 1 = full-depth fins (span entire cavity, true slide separation)
 show_numbers = 1; // 1 = True (engrave slot numbers on front face), 0 = False
+frame_base_grid = 1; // 1 = True (fins start from Z=0 floor), 0 = False
+side_guards = 1; // 1 = True (adds 45-degree mid-height diamond grid to side walls), 0 = False
 fn = 32; // Curved geometry quality. Defaults to 32.
 $fn = fn > 0 ? fn : 32;
 
@@ -141,26 +143,69 @@ module rack_body() {
     cube([_body_x, _body_y, wall_thickness]);
   }
 
+  // Side Guards (Diamond Grid Retaining Walls)
+  if (side_guards == 1) {
+    _grid_h = _body_z * 0.6; // Mid-height coverage
+    _grid_thick = 1.5; // Thickness of the lattice lines
+    _grid_step = 8; // Spacing of the lattice intersections
+    _guard_span_x = _body_x - 2 * _pillar_w;
+    
+    // Front Guard (Y = 0)
+    translate([_pillar_w, 0, _base_h])
+      intersection() {
+        cube([_guard_span_x, _grid_thick, _grid_h - _base_h]);
+        translate([0, 0, 0]) {
+          for (x = [-_body_z : _grid_step : _body_x + _body_z]) {
+            // Forward slash segments (45 deg)
+            translate([x, 0, 0]) rotate([0, 45, 0])
+              translate([0, 0, -_body_z]) cube([_grid_thick, _grid_thick, _body_z * 3]);
+            // Backslash segments (-45 deg)
+            translate([x, 0, 0]) rotate([0, -45, 0])
+              translate([0, 0, -_body_z]) cube([_grid_thick, _grid_thick, _body_z * 3]);
+          }
+        }
+      }
+
+    // Back Guard (Y = _body_y - _grid_thick)
+    translate([_pillar_w, _body_y - _grid_thick, _base_h])
+      intersection() {
+        cube([_guard_span_x, _grid_thick, _grid_h - _base_h]);
+        translate([0, 0, 0]) {
+          for (x = [-_body_z : _grid_step : _body_x + _body_z]) {
+            // Forward slash segments (45 deg)
+            translate([x, 0, 0]) rotate([0, 45, 0])
+              translate([0, 0, -_body_z]) cube([_grid_thick, _grid_thick, _body_z * 3]);
+            // Backslash segments (-45 deg)
+            translate([x, 0, 0]) rotate([0, -45, 0])
+              translate([0, 0, -_body_z]) cube([_grid_thick, _grid_thick, _body_z * 3]);
+          }
+        }
+      }
+  }
+
   // --- Dividers ---
   // The outer translate X is shifted +_min_rib_w/2 so divider i=0's left edge sits flush
   // with the left wall's inner face, and divider i=num_slots's right edge sits flush with
   // the right wall's inner face — achieving perfect X-axis symmetry around _body_x/2.
   //
   // Y is centred at _pillar_w + _cavity_y/2 = _body_y/2 for perfect Y-axis symmetry.
-  translate([_pillar_w + _min_rib_w / 2, _pillar_w + _cavity_y / 2, _base_h]) {
+  _z_offset = frame_base_grid == 1 ? 0 : _base_h;
+  _actual_rib_height = frame_base_grid == 1 ? _rib_height + _base_h : _rib_height;
+
+  translate([_pillar_w + _min_rib_w / 2, _pillar_w + _cavity_y / 2, _z_offset]) {
     for (i = [0:num_slots]) {
       translate([i * _pitch, 0, 0]) {
         if (divider_style == 0) {
           // Stub-rib mode: two thin 2mm-deep stubs per divider (front rail + back rail).
           // Minimal material — fast to print. Slides are only retained at their edges.
           translate([0, -(_cavity_y / 2 - _pillar_w / 2), 0])
-            slide_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+            slide_retention_rib(height=_actual_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
           translate([0,  (_cavity_y / 2 - _pillar_w / 2), 0])
-            slide_retention_rib(height=_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+            slide_retention_rib(height=_actual_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
         } else {
           // Full-depth fin mode: one continuous fin spanning the entire inner cavity depth.
           // True slide separation visible from all angles; preferred for staining use.
-          slide_retention_rib(height=_rib_height, depth=_cavity_y, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
+          slide_retention_rib(height=_actual_rib_height, depth=_cavity_y, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
         }
       }
     }
