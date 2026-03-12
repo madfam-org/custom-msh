@@ -198,6 +198,17 @@ module rack_body() {
         if (divider_style == 0) {
           // Stub-rib mode: two thin 2mm-deep stubs per divider (front rail + back rail).
           // Minimal material — fast to print. Slides are only retained at their edges.
+          
+          if (frame_base_grid == 0) {
+            // Front Stub AM Ramp Support
+             translate([0, -(_cavity_y / 2 - _pillar_w / 2), -_base_h])
+               prismoid(size1=[_min_rib_w, _crossbar_w], size2=[_min_rib_w, _pillar_w], h=_base_h, anchor=BOTTOM);
+            
+            // Back Stub AM Ramp Support
+             translate([0,  (_cavity_y / 2 - _pillar_w / 2), -_base_h])
+               prismoid(size1=[_min_rib_w, _crossbar_w], size2=[_min_rib_w, _pillar_w], h=_base_h, anchor=BOTTOM);
+          }
+          
           translate([0, -(_cavity_y / 2 - _pillar_w / 2), 0])
             slide_retention_rib(height=_actual_rib_height, depth=_pillar_w, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
           translate([0,  (_cavity_y / 2 - _pillar_w / 2), 0])
@@ -205,6 +216,18 @@ module rack_body() {
         } else {
           // Full-depth fin mode: one continuous fin spanning the entire inner cavity depth.
           // True slide separation visible from all angles; preferred for staining use.
+
+          if (frame_base_grid == 0) {
+            // Full-Depth Fin AM Ramp Supports (anchoring to front/back crossbars)
+             // Front edge of the fin
+             translate([0, -(_cavity_y / 2 - _crossbar_w / 2), -_base_h])
+               prismoid(size1=[_min_rib_w, _crossbar_w], size2=[_min_rib_w, 0.01], h=_base_h, anchor=BOTTOM);
+               
+             // Back edge of the fin
+             translate([0,  (_cavity_y / 2 - _crossbar_w / 2), -_base_h])
+               prismoid(size1=[_min_rib_w, _crossbar_w], size2=[_min_rib_w, 0.01], h=_base_h, anchor=BOTTOM);
+          }
+
           slide_retention_rib(height=_actual_rib_height, depth=_cavity_y, root_w=_min_rib_w, tip_w=_min_rib_w * 0.65, chamfer_h=_chamfer_h);
         }
       }
