@@ -2,7 +2,7 @@
   "project": {
     "name": "Custom MSH (AOCL)",
     "slug": "custom-msh",
-    "version": "2.3.4",
+    "version": "2.4.0",
     "description": {
       "en": "Custom substrate holder system for 1×1 inch substrates (AOCL) — holder, 10-slot rack, multi-rack joined body, 3-rack storage box, and assembly views.\n\nOfficial Visualizer and Configurator: Yantra4D",
       "es": "Sistema portamuestras para sustratos de 1×1 pulgada (AOCL) — soporte individual, rack de 10 ranuras, cuerpo multi-rack unido, caja para 3 racks y vistas de ensamblaje.\n\nVisualizador y configurador oficial: Yantra4D"
@@ -104,11 +104,11 @@
       "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 6h16\"/><path d=\"M4 12h16\"/><path d=\"M4 18h16\"/><path d=\"M7 4v16\"/><path d=\"M12 4v16\"/><path d=\"M17 4v16\"/></svg>",
       "initial_bbox": {
         "center_mm": [
-          73.5,
-          15.0,
+          24.5,
+          47.0,
           14.0
         ],
-        "max_dim_mm": 155
+        "max_dim_mm": 100
       },
       "parts": [
         "multi_rack_body"
@@ -313,6 +313,7 @@
         "substrate_length": 25.4,
         "substrate_width": 25.4,
         "multi_num_racks": 3,
+        "multi_stack_y": 1,
         "num_slots": 10,
         "tolerance_xy": 0.4,
         "tolerance_z": 0.2,
@@ -824,8 +825,25 @@
         "es": "Número de Racks Unidos"
       },
       "tooltip": {
-        "en": "How many racks are joined side-by-side with shared diamond grid guards (2-5)",
-        "es": "Cuántos racks se unen lado a lado con guardas de rejilla compartidas (2-5)"
+        "en": "How many racks are joined with shared diamond grid guards (2-5). Direction controlled by Stack Along Y-Axis setting.",
+        "es": "Cuántos racks se unen con guardas de rejilla compartidas (2-5). La dirección se controla con el ajuste Apilar a lo Largo del Eje Y."
+      },
+      "visible_in_modes": [
+        "multi_rack"
+      ],
+      "group": "rack"
+    },
+    {
+      "id": "multi_stack_y",
+      "type": "checkbox",
+      "default": true,
+      "label": {
+        "en": "Stack Along Y-Axis",
+        "es": "Apilar a lo Largo del Eje Y"
+      },
+      "tooltip": {
+        "en": "ON = racks joined front-to-back (Y-axis, default). OFF = racks joined side-by-side (X-axis).",
+        "es": "Activado = racks unidos de frente a fondo (eje Y, predeterminado). Desactivado = racks unidos lado a lado (eje X)."
       },
       "visible_in_modes": [
         "multi_rack"

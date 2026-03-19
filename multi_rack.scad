@@ -4,9 +4,9 @@
 // Copyright (c) 2026 madfam-org
 // Licensed under the CERN Open Hardware Licence Version 2 - Weakly Reciprocal (CERN-OHL-W-2.0).
 //
-// Produces 2–5 contiguous staining racks joined side-by-side along the X-axis.
+// Produces 2–5 contiguous staining racks joined along Y-axis (front-to-back,
+// default) or X-axis (side-by-side).
 // Internal junctions use Diamond Grid Side Guards instead of double solid walls.
-// Front/back guards span continuously across the full multi-rack width.
 // Side guards are mandatory (always ON) — not toggleable in this mode.
 
 use <aocl_lib.scad>
@@ -22,6 +22,7 @@ wall_thickness = 2.0;
 
 num_slots = 10;
 multi_num_racks = 3;
+multi_stack_y = 1; // 1 = join along Y (front-to-back, default), 0 = join along X (side-by-side)
 handle = 1;
 open_bottom = 1;
 label_area = 1;
@@ -46,23 +47,29 @@ _pillar_w = wall_thickness;
 _crossbar_w = 3.0;
 _crossbar_h = 2.5;
 
-// Single-rack inner width (dividers + slots, without end walls)
-_inner_per_rack = (num_slots * _pitch) + _min_rib_w;
+// Single-rack inner dimensions (without end walls)
+_inner_x = (num_slots * _pitch) + _min_rib_w;
+_inner_per_rack = _inner_x;
+_inner_y = _cavity_y;
 
-// Body dimensions (Y and Z identical to single rack)
+// Single-rack body dimensions
+_body_x_single = _inner_x + 2 * _pillar_w;
 _body_y = substrate_length + (2 * _pillar_w) + tolerance_xy;
 _base_h = open_bottom == 1 ? _crossbar_h : wall_thickness;
 _body_z = _rib_height + _base_h;
 
-// Total multi-rack width along X
-_total_x = (multi_num_racks * _inner_per_rack)
-         + (2 * _pillar_w)                       // outer end walls
-         + ((multi_num_racks - 1) * _pillar_w);  // junction guard panels
+// Axis-aware total dimensions
+_total_x = multi_stack_y == 1
+  ? _body_x_single
+  : (multi_num_racks * _inner_x) + (multi_num_racks + 1) * _pillar_w;
+
+_total_y = multi_stack_y == 1
+  ? (multi_num_racks * _inner_y) + (multi_num_racks + 1) * _pillar_w
+  : _body_y;
 
 // Handle geometry (matches rack.scad)
 _leg_w = 4.5;
 _grip_h = 5;
-_holey = max(10, _body_y - 2 * _leg_w);
 _wall_z = _body_z;
 
 // Labels
@@ -83,32 +90,39 @@ module am_ramp(w, l, h) {
         polygon([[0,0], [0,h], [l,h]]);
 }
 
-// Solid end wall with optional handle cutout (left or right outer end)
-module end_wall(x_pos) {
+// Handle wall (left or right outer end) with optional handle cutout.
+// Spans y_span in Y dimension, placed at x_pos.
+module handle_wall(x_pos, y_span) {
   translate([x_pos, 0, 0]) difference() {
-    cube([_pillar_w, _body_y, _wall_z]);
+    cube([_pillar_w, y_span, _wall_z]);
     if (handle == 1) {
       _holex = _pillar_w + 0.2;
-      _rect_h = max(0, (_wall_z - _base_h - _grip_h) - (_holey / 2));
+      _local_holey = max(10, y_span - 2 * _leg_w);
+      _rect_h = max(0, (_wall_z - _base_h - _grip_h) - (_local_holey / 2));
       translate([-0.1, _leg_w, _base_h]) {
-        if (_rect_h > 0) cube([_holex, _holey, _rect_h]);
+        if (_rect_h > 0) cube([_holex, _local_holey, _rect_h]);
         translate([0, 0, _rect_h])
           hull() {
-            cube([_holex, _holey, 0.01]);
-            translate([0, _holey / 2, _holey / 2]) cube([_holex, 0.01, 0.01]);
+            cube([_holex, _local_holey, 0.01]);
+            translate([0, _local_holey / 2, _local_holey / 2]) cube([_holex, 0.01, 0.01]);
           }
       }
     }
   }
 }
 
-// Dividers for one rack segment (identical to single rack logic)
-module rack_segment_dividers(seg_index) {
-  _seg_x = _pillar_w + seg_index * (_inner_per_rack + _pillar_w);
+// Solid end wall (X-Z plane, no handle) for Y-stacking front/back ends.
+module plain_end_wall(y_pos, x_span) {
+  translate([0, y_pos, 0])
+    cube([x_span, _pillar_w, _wall_z]);
+}
+
+// Dividers for one rack segment at explicit (seg_x, seg_y) cavity origin
+module rack_segment_dividers(seg_x, seg_y) {
   _z_offset = frame_base_grid == 1 ? 0 : _base_h;
   _actual_rib_height = frame_base_grid == 1 ? _rib_height + _base_h : _rib_height;
 
-  translate([_seg_x + _min_rib_w / 2, _pillar_w + _cavity_y / 2, _z_offset]) {
+  translate([seg_x + _min_rib_w / 2, seg_y + _cavity_y / 2, _z_offset]) {
     for (i = [0:num_slots]) {
       translate([i * _pitch, 0, 0]) {
         if (divider_style == 0) {
@@ -150,25 +164,25 @@ module rack_segment_dividers(seg_index) {
   }
 }
 
-// Slot numbers for one segment with continuous numbering across all segments
-module rack_segment_numbers(seg_index) {
+// Slot numbers for one segment at explicit position with specified start number
+module rack_segment_numbers(seg_x, seg_y, start_num) {
   if (show_numbers == 1 && fn > 0) {
-    _seg_x = _pillar_w + seg_index * (_inner_per_rack + _pillar_w);
-    _seg_start = numbering_start + (seg_index * num_slots);
+    _front_y = seg_y - _pillar_w + 0.4;
+    _back_y = seg_y + _inner_y + _pillar_w - 0.4;
 
     for (i = [0:num_slots - 1]) {
-      _num = _seg_start + i;
-      _slot_center_x = _seg_x + _min_rib_w + _slot_w / 2 + i * _pitch;
+      _num = start_num + i;
+      _slot_center_x = seg_x + _min_rib_w + _slot_w / 2 + i * _pitch;
 
       // Front face number
-      translate([_slot_center_x, 0.4, _base_h / 2])
+      translate([_slot_center_x, _front_y, _base_h / 2])
         rotate([90, 0, 0])
           linear_extrude(height=0.9)
             text(str(_num), size=_num_size, halign="center", valign="center",
                  font="Liberation Sans:style=Bold");
 
       // Back face number
-      translate([_slot_center_x, _body_y - 0.4, _base_h / 2])
+      translate([_slot_center_x, _back_y, _base_h / 2])
         rotate([90, 0, 180])
           linear_extrude(height=0.9)
             text(str(_num), size=_num_size, halign="center", valign="center",
@@ -177,28 +191,39 @@ module rack_segment_numbers(seg_index) {
   }
 }
 
-// Diamond grid guard panel in Y-Z plane at junction between adjacent segments
-module junction_guard(junction_index) {
-  _jx = _pillar_w + (junction_index + 1) * _inner_per_rack
-       + junction_index * _pillar_w;
-
-  // Rotate the standard X-Z diamond grid 90° into Y-Z plane
-  translate([_jx + _pillar_w, 0, _base_h])
-    rotate([0, 0, 90])
-      diamond_grid_guard(_body_y, _pillar_w, _grid_h - _base_h);
+// Diamond grid guard in X-Z plane at Y junction (for Y-axis stacking)
+module junction_guard_xz(jy) {
+  translate([_pillar_w, jy, _base_h])
+    diamond_grid_guard(_inner_x, _pillar_w, _grid_h - _base_h);
 }
 
-// Full-width front and back diamond grid guards
-module continuous_front_back_guards() {
-  _guard_span_x = _total_x - 2 * _pillar_w;
+// Continuous diamond grid guards on the perimeter sides
+module continuous_side_guards() {
+  if (multi_stack_y == 1) {
+    // Y stacking: left/right guards (Y-Z plane, span full inner Y)
+    _guard_span_y = _total_y - 2 * _pillar_w;
 
-  // Front guard (Y = 0 face)
-  translate([_pillar_w, 0, _base_h])
-    diamond_grid_guard(_guard_span_x, _grid_thick, _grid_h - _base_h);
+    // Left guard (X = 0 face)
+    translate([_grid_thick, _pillar_w, _base_h])
+      rotate([0, 0, 90])
+        diamond_grid_guard(_guard_span_y, _grid_thick, _grid_h - _base_h);
 
-  // Back guard (Y = _body_y face)
-  translate([_pillar_w, _body_y - _grid_thick, _base_h])
-    diamond_grid_guard(_guard_span_x, _grid_thick, _grid_h - _base_h);
+    // Right guard (X = _body_x_single face)
+    translate([_body_x_single, _pillar_w, _base_h])
+      rotate([0, 0, 90])
+        diamond_grid_guard(_guard_span_y, _grid_thick, _grid_h - _base_h);
+  } else {
+    // X stacking: front/back guards (X-Z plane, span full inner X)
+    _guard_span_x = _total_x - 2 * _pillar_w;
+
+    // Front guard (Y = 0 face)
+    translate([_pillar_w, 0, _base_h])
+      diamond_grid_guard(_guard_span_x, _grid_thick, _grid_h - _base_h);
+
+    // Back guard (Y = _body_y face)
+    translate([_pillar_w, _body_y - _grid_thick, _base_h])
+      diamond_grid_guard(_guard_span_x, _grid_thick, _grid_h - _base_h);
+  }
 }
 
 // Label recess centered on the front face
@@ -215,51 +240,115 @@ module multi_rack_label() {
 module multi_rack_complete() {
   difference() {
     union() {
-      // Outer end walls (solid, with handle cutouts)
-      end_wall(0);
-      end_wall(_total_x - _pillar_w);
+      if (multi_stack_y == 1) {
+        // === Y-AXIS STACKING (front-to-back) ===
 
-      // Base plate
-      if (open_bottom == 1) {
-        // Full-width front and back rails
-        cube([_total_x, _pillar_w, _crossbar_h]);
-        translate([0, _body_y - _pillar_w, 0])
-          cube([_total_x, _pillar_w, _crossbar_h]);
+        // Handle walls (left/right, span full total_y)
+        handle_wall(0, _total_y);
+        handle_wall(_body_x_single - _pillar_w, _total_y);
 
-        // Outer side rails (front-to-back at each end)
-        cube([_pillar_w, _body_y, _crossbar_h]);
-        translate([_total_x - _pillar_w, 0, 0])
-          cube([_pillar_w, _body_y, _crossbar_h]);
+        // End walls (front/back, solid, no handles)
+        plain_end_wall(0, _body_x_single);
+        plain_end_wall(_total_y - _pillar_w, _body_x_single);
 
-        // Junction side rails (front-to-back at each internal junction)
-        for (j = [0:multi_num_racks - 2]) {
-          _jx = _pillar_w + (j + 1) * _inner_per_rack + j * _pillar_w;
-          translate([_jx, 0, 0])
-            cube([_pillar_w, _body_y, _crossbar_h]);
+        // Base plate
+        if (open_bottom == 1) {
+          // Full-span left/right rails
+          cube([_pillar_w, _total_y, _crossbar_h]);
+          translate([_body_x_single - _pillar_w, 0, 0])
+            cube([_pillar_w, _total_y, _crossbar_h]);
+
+          // Full-span front/back rails
+          cube([_body_x_single, _pillar_w, _crossbar_h]);
+          translate([0, _total_y - _pillar_w, 0])
+            cube([_body_x_single, _pillar_w, _crossbar_h]);
+
+          // Junction rails (X direction at each Y junction)
+          for (j = [0:multi_num_racks - 2]) {
+            _jy = _pillar_w + (j + 1) * _inner_y + j * _pillar_w;
+            translate([0, _jy, 0])
+              cube([_body_x_single, _pillar_w, _crossbar_h]);
+          }
+
+          // Per-segment inner crossbar rails (at 33%/67% of inner_y within each segment)
+          for (i = [0:multi_num_racks - 1]) {
+            _sy = _pillar_w + i * (_inner_y + _pillar_w);
+            for (frac = [0.33, 0.67])
+              translate([0, _sy + _inner_y * frac - _crossbar_w / 2, 0])
+                cube([_body_x_single, _crossbar_w, _crossbar_h]);
+          }
+        } else {
+          // Solid base floor
+          cube([_body_x_single, _total_y, wall_thickness]);
         }
 
-        // Inner crossbar rails (full-width at 33% and 67% of Y)
-        for (frac = [0.33, 0.67])
-          translate([0, _body_y * frac - _crossbar_w / 2, 0])
-            cube([_total_x, _crossbar_w, _crossbar_h]);
+        // Dividers and slot numbers for each rack segment
+        for (i = [0:multi_num_racks - 1]) {
+          _sy = _pillar_w + i * (_inner_y + _pillar_w);
+          rack_segment_dividers(_pillar_w, _sy);
+          rack_segment_numbers(_pillar_w, _sy, numbering_start + i * num_slots);
+        }
+
+        // Junction diamond grid guards (X-Z plane between adjacent segments)
+        for (j = [0:multi_num_racks - 2]) {
+          _jy = _pillar_w + (j + 1) * _inner_y + j * _pillar_w;
+          junction_guard_xz(_jy);
+        }
+
+        // Continuous side guards (left/right Y-Z plane diamond grid)
+        continuous_side_guards();
+
       } else {
-        // Solid base floor
-        cube([_total_x, _body_y, wall_thickness]);
-      }
+        // === X-AXIS STACKING (side-by-side) ===
 
-      // Dividers and slot numbers for each rack segment
-      for (i = [0:multi_num_racks - 1]) {
-        rack_segment_dividers(i);
-        rack_segment_numbers(i);
-      }
+        // Outer handle walls (with handle cutouts)
+        handle_wall(0, _body_y);
+        handle_wall(_total_x - _pillar_w, _body_y);
 
-      // Junction diamond grid guards (between adjacent segments)
-      for (j = [0:multi_num_racks - 2]) {
-        junction_guard(j);
-      }
+        // Base plate
+        if (open_bottom == 1) {
+          // Full-width front and back rails
+          cube([_total_x, _pillar_w, _crossbar_h]);
+          translate([0, _body_y - _pillar_w, 0])
+            cube([_total_x, _pillar_w, _crossbar_h]);
 
-      // Continuous front/back diamond grid guards (full width)
-      continuous_front_back_guards();
+          // Outer side rails (front-to-back at each end)
+          cube([_pillar_w, _body_y, _crossbar_h]);
+          translate([_total_x - _pillar_w, 0, 0])
+            cube([_pillar_w, _body_y, _crossbar_h]);
+
+          // Junction side rails (front-to-back at each internal junction)
+          for (j = [0:multi_num_racks - 2]) {
+            _jx = _pillar_w + (j + 1) * _inner_x + j * _pillar_w;
+            translate([_jx, 0, 0])
+              cube([_pillar_w, _body_y, _crossbar_h]);
+          }
+
+          // Inner crossbar rails (full-width at 33% and 67% of Y)
+          for (frac = [0.33, 0.67])
+            translate([0, _body_y * frac - _crossbar_w / 2, 0])
+              cube([_total_x, _crossbar_w, _crossbar_h]);
+        } else {
+          // Solid base floor
+          cube([_total_x, _body_y, wall_thickness]);
+        }
+
+        // Dividers and slot numbers for each rack segment
+        for (i = [0:multi_num_racks - 1]) {
+          _sx = _pillar_w + i * (_inner_x + _pillar_w);
+          rack_segment_dividers(_sx, _pillar_w);
+          rack_segment_numbers(_sx, _pillar_w, numbering_start + i * num_slots);
+        }
+
+        // Junction walls (solid handle walls between adjacent segments)
+        for (j = [0:multi_num_racks - 2]) {
+          _jx = _pillar_w + (j + 1) * _inner_x + j * _pillar_w;
+          handle_wall(_jx, _body_y);
+        }
+
+        // Continuous front/back diamond grid guards (full width)
+        continuous_side_guards();
+      }
     }
 
     // Subtract label recess

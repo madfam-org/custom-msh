@@ -8,7 +8,7 @@ Official Visualizer and Configurator: Yantra4D
 
 *Visualizador y configurador oficial: Yantra4D*
 
-**Version**: 2.3.4
+**Version**: 2.4.0
 **Slug**: `custom-msh`
 **License**: CERN-OHL-W-2.0
 
@@ -18,7 +18,7 @@ Official Visualizer and Configurator: Yantra4D
 |---|---|---|---|
 | `holder` | Single Holder | `holder.scad` | holder_body |
 | `rack` | Staining Rack | `rack.scad` | rack |
-| `multi_rack` | Multi-Rack | `multi_rack.scad` | multi_rack_body |
+| `multi_rack` | Multi-Rack (Y/X) | `multi_rack.scad` | multi_rack_body |
 | `box` | Racks Box | `box.scad` | box_base, box_lid |
 | `base` | Box Base | `box.scad` | box_base |
 | `lid` | Box Lid | `box.scad` | box_lid |
@@ -46,7 +46,8 @@ Official Visualizer and Configurator: Yantra4D
 | `numbering_start` | slider | 1 | 1-100 | rack, multi_rack, assembly | First slot number engraved. Requires show_numbers ON |
 | `divider_style` | checkbox | Yes | | rack, multi_rack, assembly | Full-depth fins (ON) vs. stub ribs (OFF) |
 | `num_racks` | slider | 3 | 1-5 | box, assembly, base, lid | How many racks the box accommodates |
-| `multi_num_racks` | slider | 3 | 2-5 | multi_rack | Number of racks joined side-by-side with shared diamond grid guards |
+| `multi_num_racks` | slider | 3 | 2-5 | multi_rack | Number of racks joined with shared diamond grid guards |
+| `multi_stack_y` | checkbox | Yes | | multi_rack | ON = racks joined front-to-back (Y-axis, default). OFF = joined side-by-side (X-axis) |
 | `frame_base_grid` | checkbox | Yes | | rack, multi_rack, assembly | Forces the divider fins to extend to Z=0 floor |
 | `side_guards` | checkbox | Yes | | rack, assembly | 45-degree diamond grid retaining walls on sides |
 | `fn` | slider | 32 | 0-64 (step 8) | all | Quality ($fn). 0=auto draft; higher=detail+numbers |

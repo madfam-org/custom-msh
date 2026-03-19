@@ -60,7 +60,7 @@ When you see the tables below, they are derived from this manifest.
 
 ## Project Specifications 
 
-**Version**: 2.3.4  
+**Version**: 2.4.0  
 **Slug**: `custom-msh`  
 **License**: CERN-OHL-W-2.0  
 **Official Configurator**: [Yantra4D](https://github.com/madfam-org/yantra4d)
@@ -71,7 +71,7 @@ When you see the tables below, they are derived from this manifest.
 |---|---|---|---|---|
 | `holder` | Single Holder | [`holder.scad`](./holder.scad) | holder_body | Generates a single AOCL substrate holder. |
 | `rack` | Staining Rack | [`rack.scad`](./rack.scad) | rack | Generates a rack holding multiple substrates. |
-| `multi_rack` | Multi-Rack | [`multi_rack.scad`](./multi_rack.scad) | multi_rack_body | Generates 2–5 contiguous racks joined side-by-side with diamond grid junction guards. |
+| `multi_rack` | Multi-Rack | [`multi_rack.scad`](./multi_rack.scad) | multi_rack_body | Generates 2–5 contiguous racks joined front-to-back (Y-axis, default) or side-by-side (X-axis) with diamond grid junction guards. |
 | `box` | Racks Box | [`box.scad`](./box.scad) | box_base, box_lid | Generates an outer enclosure for racks (base + lid). |
 | `base` | Box Base | [`box.scad`](./box.scad) | box_base | Box base only (for single-piece printing). |
 | `lid` | Box Lid | [`box.scad`](./box.scad) | box_lid | Box lid only (for single-piece printing). |
@@ -102,7 +102,8 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 | `numbering_start` | slider | 1 | 1–100 | First slot number engraved on the rack. Requires Show Slot Numbers ON and Quality ($fn) > 0. |
 | `divider_style` | checkbox | Yes | - | Full-depth fins (ON) vs. stub ribs at front+back only (OFF) |
 | `num_racks` | slider | 3 | 1–5 | How many racks the box accommodates. |
-| `multi_num_racks` | slider | 3 | 2–5 | How many racks are joined side-by-side with shared diamond grid guards. |
+| `multi_num_racks` | slider | 3 | 2–5 | How many racks are joined with shared diamond grid guards. Direction controlled by Stack Along Y-Axis. |
+| `multi_stack_y` | checkbox | Yes | - | ON = racks joined front-to-back (Y-axis, default). OFF = racks joined side-by-side (X-axis). |
 | `frame_base_grid` | checkbox | Yes | - | Forces the divider fins to extend downwards to the absolute Z=0 floor |
 | `side_guards` | checkbox | Yes | - | Generates a 1.5mm 45-degree diamond grid lattice as a mid-height retaining wall along the rack sides |
 | `fn` | slider | 32 | 0–64 (step 8) | Polygon resolution. 0 = auto (fast draft). Higher = slower but detailed. |
