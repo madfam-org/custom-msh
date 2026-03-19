@@ -71,6 +71,7 @@ When you see the tables below, they are derived from this manifest.
 |---|---|---|---|---|
 | `holder` | Single Holder | [`holder.scad`](./holder.scad) | holder_body | Generates a single AOCL substrate holder. |
 | `rack` | Staining Rack | [`rack.scad`](./rack.scad) | rack | Generates a rack holding multiple substrates. |
+| `multi_rack` | Multi-Rack | [`multi_rack.scad`](./multi_rack.scad) | multi_rack_body | Generates 2–5 contiguous racks joined side-by-side with diamond grid junction guards. |
 | `box` | Racks Box | [`box.scad`](./box.scad) | box_base, box_lid | Generates an outer enclosure for racks (base + lid). |
 | `base` | Box Base | [`box.scad`](./box.scad) | box_base | Box base only (for single-piece printing). |
 | `lid` | Box Lid | [`box.scad`](./box.scad) | box_lid | Box lid only (for single-piece printing). |
@@ -101,6 +102,7 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 | `numbering_start` | slider | 1 | 1–100 | First slot number engraved on the rack. Requires Show Slot Numbers ON and Quality ($fn) > 0. |
 | `divider_style` | checkbox | Yes | - | Full-depth fins (ON) vs. stub ribs at front+back only (OFF) |
 | `num_racks` | slider | 3 | 1–5 | How many racks the box accommodates. |
+| `multi_num_racks` | slider | 3 | 2–5 | How many racks are joined side-by-side with shared diamond grid guards. |
 | `frame_base_grid` | checkbox | Yes | - | Forces the divider fins to extend downwards to the absolute Z=0 floor |
 | `side_guards` | checkbox | Yes | - | Generates a 1.5mm 45-degree diamond grid lattice as a mid-height retaining wall along the rack sides |
 | `fn` | slider | 32 | 0–64 (step 8) | Polygon resolution. 0 = auto (fast draft). Higher = slower but detailed. |
@@ -111,6 +113,7 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 |---|---|
 | **Default Holder** | holder |
 | **Default Staining Rack** | rack |
+| **Default Multi-Rack (3 Joined)** | multi_rack |
 | **Default Racks Box** | box, base, lid |
 | **Staining rack WITH slides** | assembly (level 1) |
 | **Racks box WITH racks & slides (no lid)** | assembly (level 2) |
@@ -122,6 +125,7 @@ The following interactive parameters define the bounds of this hyperobject. Noti
 |---|---|---|---|
 | `holder_body` | Holder Body | `#4a90d9` | |
 | `rack` | Rack | `#e5e7eb` | |
+| `multi_rack_body` | Multi-Rack Body | `#e5e7eb` | render_mode 5 |
 | `box_base` | Box Base | `#4a90d9` | |
 | `box_lid` | Box Lid | `#6b7280` | |
 | `slides` | Slides | `#cce8f4` | glass: true |

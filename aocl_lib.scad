@@ -46,6 +46,22 @@ module aocl_snap_catch(w, h, d) {
   cuboid([w, d, h], anchor=BOTTOM);
 }
 
+// Generates a 45-degree diamond lattice panel.
+// span: primary extent (X), thickness: panel depth (Y), height: panel height (Z)
+// step: lattice cell size, bar: lattice line thickness
+module diamond_grid_guard(span, thickness, height, step=8, bar=1.5) {
+  _max = max(span, height) + step;
+  intersection() {
+    cube([span, thickness, height]);
+    for (x = [-_max : step : span + _max]) {
+      translate([x, 0, 0]) rotate([0, 45, 0])
+        translate([0, 0, -_max]) cube([bar, thickness, _max * 3]);
+      translate([x, 0, 0]) rotate([0, -45, 0])
+        translate([0, 0, -_max]) cube([bar, thickness, _max * 3]);
+    }
+  }
+}
+
 module slide_retention_rib(height, depth, root_w, tip_w, chamfer_h = 0) {
   _main_h = height - chamfer_h;
   if (_main_h > 0) {

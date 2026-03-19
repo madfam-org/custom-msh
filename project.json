@@ -4,8 +4,8 @@
     "slug": "custom-msh",
     "version": "2.3.4",
     "description": {
-      "en": "Custom substrate holder system for 1×1 inch substrates (AOCL) — holder, 10-slot rack, 3-rack storage box, and assembly views.\n\nOfficial Visualizer and Configurator: Yantra4D",
-      "es": "Sistema portamuestras para sustratos de 1×1 pulgada (AOCL) — soporte individual, rack de 10 ranuras, caja para 3 racks y vistas de ensamblaje.\n\nVisualizador y configurador oficial: Yantra4D"
+      "en": "Custom substrate holder system for 1×1 inch substrates (AOCL) — holder, 10-slot rack, multi-rack joined body, 3-rack storage box, and assembly views.\n\nOfficial Visualizer and Configurator: Yantra4D",
+      "es": "Sistema portamuestras para sustratos de 1×1 pulgada (AOCL) — soporte individual, rack de 10 ranuras, cuerpo multi-rack unido, caja para 3 racks y vistas de ensamblaje.\n\nVisualizador y configurador oficial: Yantra4D"
     },
     "thumbnail": "/projects/custom-msh.webp",
     "tags": [
@@ -94,7 +94,30 @@
         "formula": "constant"
       }
     },
-
+    {
+      "id": "multi_rack",
+      "scad_file": "multi_rack.scad",
+      "label": {
+        "en": "Multi-Rack",
+        "es": "Multi-Rack"
+      },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 6h16\"/><path d=\"M4 12h16\"/><path d=\"M4 18h16\"/><path d=\"M7 4v16\"/><path d=\"M12 4v16\"/><path d=\"M17 4v16\"/></svg>",
+      "initial_bbox": {
+        "center_mm": [
+          73.5,
+          15.0,
+          14.0
+        ],
+        "max_dim_mm": 155
+      },
+      "parts": [
+        "multi_rack_body"
+      ],
+      "estimate": {
+        "base_units": 1,
+        "formula": "constant"
+      }
+    },
     {
       "id": "base",
       "scad_file": "box.scad",
@@ -191,6 +214,15 @@
       "default_color": "#e5e7eb"
     },
     {
+      "id": "multi_rack_body",
+      "render_mode": 5,
+      "label": {
+        "en": "Multi-Rack Body",
+        "es": "Cuerpo Multi-Rack"
+      },
+      "default_color": "#e5e7eb"
+    },
+    {
       "id": "box_base",
       "render_mode": 2,
       "label": {
@@ -265,6 +297,32 @@
         "divider_style": 1,
         "frame_base_grid": 1,
         "side_guards": 1
+      }
+    },
+    {
+      "id": "default_multi_rack",
+      "visible_in_modes": [
+        "multi_rack"
+      ],
+      "label": {
+        "en": "Default Multi-Rack (3 Joined)",
+        "es": "Multi-Rack Predeterminado (3 Unidos)"
+      },
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 6h16\"/><path d=\"M4 12h16\"/><path d=\"M4 18h16\"/><path d=\"M7 4v16\"/><path d=\"M12 4v16\"/><path d=\"M17 4v16\"/></svg>",
+      "values": {
+        "substrate_length": 25.4,
+        "substrate_width": 25.4,
+        "multi_num_racks": 3,
+        "num_slots": 10,
+        "tolerance_xy": 0.4,
+        "tolerance_z": 0.2,
+        "wall_thickness": 2.0,
+        "handle": 1,
+        "open_bottom": 1,
+        "numbering_start": 1,
+        "divider_style": 1,
+        "frame_base_grid": 1,
+        "label_area": 1
       }
     },
     {
@@ -407,6 +465,7 @@
       "visible_in_modes": [
         "holder",
         "rack",
+        "multi_rack",
         "assembly",
         "base",
         "lid"
@@ -431,6 +490,7 @@
       "visible_in_modes": [
         "holder",
         "rack",
+        "multi_rack",
         "assembly",
         "base",
         "lid"
@@ -474,6 +534,7 @@
       "visible_in_modes": [
         "holder",
         "rack",
+        "multi_rack",
         "assembly",
         "base",
         "lid"
@@ -498,6 +559,7 @@
       },
       "visible_in_modes": [
         "rack",
+        "multi_rack",
         "assembly"
       ],
       "group": "tolerance",
@@ -521,6 +583,7 @@
       "visible_in_modes": [
         "holder",
         "rack",
+        "multi_rack",
         "assembly",
         "base",
         "lid"
@@ -562,6 +625,7 @@
       "visible_in_modes": [
         "holder",
         "rack",
+        "multi_rack",
         "base",
         "lid"
       ],
@@ -601,6 +665,7 @@
       },
       "visible_in_modes": [
         "rack",
+        "multi_rack",
         "assembly"
       ],
       "group": "rack"
@@ -619,6 +684,7 @@
       },
       "visible_in_modes": [
         "rack",
+        "multi_rack",
         "assembly"
       ],
       "group": "rack"
@@ -637,6 +703,7 @@
       },
       "visible_in_modes": [
         "rack",
+        "multi_rack",
         "assembly"
       ],
       "group": "rack"
@@ -676,6 +743,7 @@
       },
       "visible_in_modes": [
         "rack",
+        "multi_rack",
         "assembly"
       ],
       "group": "rack"
@@ -697,6 +765,7 @@
       },
       "visible_in_modes": [
         "rack",
+        "multi_rack",
         "assembly"
       ],
       "group": "rack",
@@ -716,6 +785,7 @@
       },
       "visible_in_modes": [
         "rack",
+        "multi_rack",
         "assembly"
       ],
       "group": "rack"
@@ -743,6 +813,26 @@
       "group": "box"
     },
     {
+      "id": "multi_num_racks",
+      "type": "slider",
+      "default": 3,
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": {
+        "en": "Number of Joined Racks",
+        "es": "Número de Racks Unidos"
+      },
+      "tooltip": {
+        "en": "How many racks are joined side-by-side with shared diamond grid guards (2-5)",
+        "es": "Cuántos racks se unen lado a lado con guardas de rejilla compartidas (2-5)"
+      },
+      "visible_in_modes": [
+        "multi_rack"
+      ],
+      "group": "rack"
+    },
+    {
       "id": "fn",
       "type": "slider",
       "default": 32,
@@ -760,6 +850,7 @@
       "visible_in_modes": [
         "holder",
         "rack",
+        "multi_rack",
         "assembly",
         "base",
         "lid"
@@ -781,6 +872,7 @@
       },
       "visible_in_modes": [
         "rack",
+        "multi_rack",
         "assembly"
       ],
       "group": "rack"

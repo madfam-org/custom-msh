@@ -153,42 +153,17 @@ module rack_body() {
 
   // Side Guards (Diamond Grid Retaining Walls)
   if (side_guards == 1) {
-    _grid_h = _body_z * 0.6; // Mid-height coverage
-    _grid_thick = 1.5; // Thickness of the lattice lines
-    _grid_step = 8; // Spacing of the lattice intersections
+    _grid_h = _body_z * 0.6;
+    _grid_thick = 1.5;
     _guard_span_x = _body_x - 2 * _pillar_w;
-    
+
     // Front Guard (Y = 0)
     translate([_pillar_w, 0, _base_h])
-      intersection() {
-        cube([_guard_span_x, _grid_thick, _grid_h - _base_h]);
-        translate([0, 0, 0]) {
-          for (x = [-_body_z : _grid_step : _body_x + _body_z]) {
-            // Forward slash segments (45 deg)
-            translate([x, 0, 0]) rotate([0, 45, 0])
-              translate([0, 0, -_body_z]) cube([_grid_thick, _grid_thick, _body_z * 3]);
-            // Backslash segments (-45 deg)
-            translate([x, 0, 0]) rotate([0, -45, 0])
-              translate([0, 0, -_body_z]) cube([_grid_thick, _grid_thick, _body_z * 3]);
-          }
-        }
-      }
+      diamond_grid_guard(_guard_span_x, _grid_thick, _grid_h - _base_h);
 
     // Back Guard (Y = _body_y - _grid_thick)
     translate([_pillar_w, _body_y - _grid_thick, _base_h])
-      intersection() {
-        cube([_guard_span_x, _grid_thick, _grid_h - _base_h]);
-        translate([0, 0, 0]) {
-          for (x = [-_body_z : _grid_step : _body_x + _body_z]) {
-            // Forward slash segments (45 deg)
-            translate([x, 0, 0]) rotate([0, 45, 0])
-              translate([0, 0, -_body_z]) cube([_grid_thick, _grid_thick, _body_z * 3]);
-            // Backslash segments (-45 deg)
-            translate([x, 0, 0]) rotate([0, -45, 0])
-              translate([0, 0, -_body_z]) cube([_grid_thick, _grid_thick, _body_z * 3]);
-          }
-        }
-      }
+      diamond_grid_guard(_guard_span_x, _grid_thick, _grid_h - _base_h);
   }
 
   // --- Dividers ---
