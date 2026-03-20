@@ -199,20 +199,7 @@ module junction_guard_xz(jy) {
 
 // Continuous diamond grid guards on the perimeter sides
 module continuous_side_guards() {
-  if (multi_stack_y == 1) {
-    // Y stacking: left/right guards (Y-Z plane, span full inner Y)
-    _guard_span_y = _total_y - 2 * _pillar_w;
-
-    // Left guard (X = 0 face)
-    translate([_grid_thick, _pillar_w, _base_h])
-      rotate([0, 0, 90])
-        diamond_grid_guard(_guard_span_y, _grid_thick, _grid_h - _base_h);
-
-    // Right guard (X = _body_x_single face)
-    translate([_body_x_single, _pillar_w, _base_h])
-      rotate([0, 0, 90])
-        diamond_grid_guard(_guard_span_y, _grid_thick, _grid_h - _base_h);
-  } else {
+  if (multi_stack_y == 0) {
     // X stacking: front/back guards (X-Z plane, span full inner X)
     _guard_span_x = _total_x - 2 * _pillar_w;
 
@@ -243,9 +230,14 @@ module multi_rack_complete() {
       if (multi_stack_y == 1) {
         // === Y-AXIS STACKING (front-to-back) ===
 
-        // Handle walls (left/right, span full total_y)
-        handle_wall(0, _total_y);
-        handle_wall(_body_x_single - _pillar_w, _total_y);
+        // Per-segment handle walls (front/back, each with independent handle cutout)
+        for (i = [0:multi_num_racks - 1]) {
+          _seg_y_start = i * (_inner_y + _pillar_w);
+          translate([0, _seg_y_start, 0]) {
+            handle_wall(0, _body_y);
+            handle_wall(_body_x_single - _pillar_w, _body_y);
+          }
+        }
 
         // End walls (front/back, solid, no handles)
         plain_end_wall(0, _body_x_single);
@@ -295,8 +287,18 @@ module multi_rack_complete() {
           junction_guard_xz(_jy);
         }
 
-        // Continuous side guards (left/right Y-Z plane diamond grid)
-        continuous_side_guards();
+        // Per-segment side guards (X-Z plane diamond grid at each segment's Y boundaries)
+        for (i = [0:multi_num_racks - 1]) {
+          _sy = _pillar_w + i * (_inner_y + _pillar_w);
+
+          // Segment front side guard (Y = segment start)
+          translate([_pillar_w, _sy - _grid_thick, _base_h])
+            diamond_grid_guard(_inner_x, _grid_thick, _grid_h - _base_h);
+
+          // Segment back side guard (Y = segment end)
+          translate([_pillar_w, _sy + _inner_y, _base_h])
+            diamond_grid_guard(_inner_x, _grid_thick, _grid_h - _base_h);
+        }
 
       } else {
         // === X-AXIS STACKING (side-by-side) ===
