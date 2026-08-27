@@ -5,6 +5,12 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Callers pin the reusable workflow at @main, but a *rerun* replays it at the
+  # SHA it resolved to originally. When the shared workflow is fixed, the only
+  # way to re-evaluate this repo was an empty commit. workflow_dispatch makes
+  # this repo re-testable against the current shared workflow without
+  # fabricating history.
+  workflow_dispatch:
 
 jobs:
   build:
