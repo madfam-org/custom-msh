@@ -1,3 +1,5 @@
+> **Archived 2026-09-04 (RFC 0038 §9 / ADR-020).** This repository is read-only. The cartridge now lives in [`https://github.com/madfam-org/solid-hyperobjects/tree/main/custom-msh`](https://github.com/madfam-org/solid-hyperobjects/tree/main/custom-msh) — same files, full history absorbed. Open issues and pull requests there.
+
 # Custom Microscope Slide Holder (AOCL)
 
 Welcome to the `custom-msh` repository! If you're new to parametric manufacturing or the Yantra4D platform, you're in the right place. This document is designed to help you understand not just *what* this project does, but *why* it's built this way.
